@@ -1,28 +1,23 @@
-# NO LONGER MAINTAINED. ANY VERSION AFTER 1.19.4 WILL NOT BE SUPPORTED! USE BUKKIT'S PARTICLE API OR [NMS-UTILS (NOT MULTIVERSION)](https://github.com/xenondevs/NMS-Utilities) INSTEAD
-
 <h1 align="center">
-  <img width=250 height=250 src="https://raw.githubusercontent.com/ByteZ1337/ParticleLib/0703161cf8b3402541c895885fbd0083ac688394/.github/img/logo.svg" />
+  <img width=250 height=250 src="https://raw.githubusercontent.com/GeorgeV220/ParticleLib/0703161cf8b3402541c895885fbd0083ac688394/.github/img/logo.svg" />
   <br>ParticleLib<br>
 </h1>
 
 <p align="center">
   <b>A spigot library supporting all particles from <code>1.8</code> to <code>1.19.3</code></b><br><br>
-  <a href="https://app.codacy.com/manual/ByteZ1337/ParticleLib?utm_source=github.com&utm_medium=referral&utm_content=ByteZ1337/ParticleLib&utm_campaign=Badge_Grade_Dashboard">
+  <a href="https://app.codacy.com/manual/GeorgeV220/ParticleLib?utm_source=github.com&utm_medium=referral&utm_content=GeorgeV220/ParticleLib&utm_campaign=Badge_Grade_Dashboard">
     <img src="https://api.codacy.com/project/badge/Grade/166f125b74014326831ca21c1d7df65b" alt="codacy"/>
   </a>
-  <a href="https://search.maven.org/artifact/xyz.xenondevs/particle">
-    <img src="https://img.shields.io/maven-central/v/xyz.xenondevs/particle" alt="maven"> 
+  <a href="https://github.com/GeorgeV220/ParticleLib/issues">
+    <img src="https://img.shields.io/github/issues/GeorgeV220/ParticleLib" alt="issues"/>
   </a>
-  <a href="https://github.com/ByteZ1337/ParticleLib/issues">
-    <img src="https://img.shields.io/github/issues/ByteZ1337/ParticleLib" alt="issues"/>
+  <a href="https://github.com/GeorgeV220/ParticleLib/stargazers">
+    <img src="https://img.shields.io/github/stars/GeorgeV220/ParticleLib" alt="stars"/>
   </a>
-  <a href="https://github.com/ByteZ1337/ParticleLib/stargazers">
-    <img src="https://img.shields.io/github/stars/ByteZ1337/ParticleLib" alt="stars"/>
+  <a href="https://github.com/GeorgeV220/ParticleLib/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/GeorgeV220/ParticleLib" alt="license"/>
   </a>
-  <a href="https://github.com/ByteZ1337/ParticleLib/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/ByteZ1337/ParticleLib" alt="license"/>
-  </a>
-  <img src="https://img.shields.io/github/actions/workflow/status/ByteZ1337/ParticleLib/maven.yml?branch=master" alt="build"/><br><br>
+  <img src="https://img.shields.io/github/actions/workflow/status/GeorgeV220/ParticleLib/gradle.yml?branch=master" alt="build"/><br><br>
   <a href="#support">Support</a> •
   <a href="#features">Features</a> •
   <a href="#download">Download</a> •
@@ -31,7 +26,7 @@
 
 ## Support
 
-Join the [Discord](https://discord.gg/EpVMXtXB2t) if you have any questions. **Don't** open an issue to ask for support.
+Open an issue for a bug or feature request. **Don't** open an issue to ask for support.
 
 ## Features
 
@@ -44,17 +39,17 @@ Join the [Discord](https://discord.gg/EpVMXtXB2t) if you have any questions. **D
 
 ## Download
 
-The latest version <img src="https://img.shields.io/github/v/release/ByteZ1337/ParticleLib"/> can be downloaded on the
-<a href="https://github.com/ByteZ1337/ParticleLib/releases">releases</a> page.<br>
+The latest version <img src="https://img.shields.io/github/v/release/GeorgeV220/ParticleLib"/> can be downloaded on the
+<a href="https://github.com/GeorgeV220/ParticleLib/releases">releases</a> page.<br>
 
 ### Maven
 
 ```xml
 <dependencies>
     <dependency>
-        <groupId>xyz.xenondevs</groupId>
+        <groupId>com.georgev22</groupId>
         <artifactId>particle</artifactId>
-        <version>1.8.4</version>
+        <version>1.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -63,7 +58,7 @@ The latest version <img src="https://img.shields.io/github/v/release/ByteZ1337/P
 
 ```groovy
 dependencies {
-    implementation 'xyz.xenondevs:particle:1.8.4'
+    implementation 'com.georgev22:particle:1.0.0'
 }
 ```
 
@@ -71,7 +66,7 @@ dependencies {
 
 ## Usage
 
-<b>For more advanced usage explanations check out the [Wiki](https://github.com/ByteZ1337/ParticleLib/wiki). </b>
+<b>For more advanced usage explanations check out the [Wiki](https://github.com/GeorgeV220/ParticleLib/wiki). </b>
 
 ### Simple
 
