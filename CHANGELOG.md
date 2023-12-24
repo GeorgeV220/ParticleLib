@@ -1,3 +1,10 @@
+# [1.1.0-alpha.2](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.1...v1.1.0-alpha.2) (2023-12-24)
+
+
+### Bug Fixes
+
+* fix some max values in mappings.json ([1871daf](https://github.com/GeorgeV220/ParticleLib/commit/1871daf18dd6fda49c081d18a7537350539701b8))
+
 # [1.1.0-alpha.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.0.0...v1.1.0-alpha.1) (2023-06-20)
 
 
