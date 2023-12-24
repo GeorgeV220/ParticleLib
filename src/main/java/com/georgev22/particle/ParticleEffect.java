@@ -1666,4 +1666,26 @@ public enum ParticleEffect {
                 .forEach(p -> ReflectionUtils.sendPacket(p, nmsPacket));
     }
 
+    /**
+     * Gets the field name mapper function.
+     *
+     * @return The field name mapper function.
+     */
+    public DoubleFunction<String> getFieldNameMapper() {
+        return fieldNameMapper;
+    }
+
+    /**
+     * Gets a ParticleEffect by name.
+     *
+     * @param name The name of the ParticleEffect.
+     * @return The ParticleEffect corresponding to the given name, or null if not found.
+     */
+    public static ParticleEffect getParticle(String name) {
+        return Arrays.stream(ParticleEffect.values())
+                .filter(particleEffect -> particleEffect.name().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
