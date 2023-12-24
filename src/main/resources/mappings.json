@@ -436,7 +436,7 @@
   {
     "name": "Registry.ParticleTypeRegistry",
     "min": 13,
-    "max": 19.2,
+    "max": 99,
     "mappings": [
       {
         "from": 13,
@@ -467,7 +467,7 @@
   {
     "name": "Registry.BlockRegistry",
     "min": 17,
-    "max": 19.2,
+    "max": 99,
     "mappings": [
       {
         "from": 17,
