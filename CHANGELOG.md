@@ -1,3 +1,10 @@
+# [1.1.0-alpha.4](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.3...v1.1.0-alpha.4) (2023-12-24)
+
+
+### Features
+
+* Add ParticleEffect.getParticle(String) and ParticleEffect.CONSTANT.getFieldNameMapper() ([0a75319](https://github.com/GeorgeV220/ParticleLib/commit/0a7531923fe84911fabf22b90e6689cfad198ea6))
+
 # [1.1.0-alpha.3](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.2...v1.1.0-alpha.3) (2023-12-24)
 
 
