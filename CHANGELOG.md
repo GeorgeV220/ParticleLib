@@ -1,3 +1,10 @@
+# [1.1.0-alpha.3](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.2...v1.1.0-alpha.3) (2023-12-24)
+
+
+### Features
+
+* Add support for 1.20.3-1.20.4 ([772f0d1](https://github.com/GeorgeV220/ParticleLib/commit/772f0d143415f4f0158585682a54d40ecbbab11c))
+
 # [1.1.0-alpha.2](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.1...v1.1.0-alpha.2) (2023-12-24)
 
 
