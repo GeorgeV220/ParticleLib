@@ -101,7 +101,7 @@ public final class ReflectionUtils {
         int dashIndex = bukkitVersion.indexOf("-");
         MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length()));
         NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION < 17 ? ".server." + version : "");
-        CRAFT_BUKKIT_PACKAGE_PATH = "org.bukkit.craftbukkit." + version;
+        CRAFT_BUKKIT_PACKAGE_PATH = MINECRAFT_VERSION >= 20.4 ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + version;
         plugin = readDeclaredField(PLUGIN_CLASS_LOADER_PLUGIN_FIELD, ReflectionUtils.class.getClassLoader());
         PLAYER_CONNECTION_CACHE = new PlayerConnectionCache();
         try {
