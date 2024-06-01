@@ -1,3 +1,10 @@
+# [1.1.0-alpha.5](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.4...v1.1.0-alpha.5) (2024-06-01)
+
+
+### Features
+
+* Initial 1.20.5 Support ([#1](https://github.com/GeorgeV220/ParticleLib/issues/1)) ([82c1de8](https://github.com/GeorgeV220/ParticleLib/commit/82c1de8e794a48f5758be1563407aa69052ec9bd))
+
 # [1.1.0-alpha.4](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.3...v1.1.0-alpha.4) (2023-12-24)
 
 
