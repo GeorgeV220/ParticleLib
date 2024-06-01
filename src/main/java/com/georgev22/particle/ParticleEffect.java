@@ -725,7 +725,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    GUST_EMITTER_SMALL(version -> version < 20.3 ? "NONE" : "gust_emitter_small", DIRECTIONAL),
+    GUST_EMITTER_SMALL(version -> version < 20.5 ? "NONE" : "gust_emitter_small", DIRECTIONAL),
     /**
      * In vanilla, this particle is created when a wind charge hits a block.
      * Spawns a number of gust particles.
@@ -736,7 +736,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    GUST_EMITTER_LARGE(version -> version < 20.3 ? "NONE" : "gust_emitter_large", DIRECTIONAL),
+    GUST_EMITTER_LARGE(version -> version < 20.5 ? "NONE" : "gust_emitter_large", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when taming or
      * breeding animals.
@@ -1303,7 +1303,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set.</li>
      * </ul>
      */
-    TRIAL_SPAWNER_DETECTION_OMINOUS(version -> version < 20.3 ? "NONE" : "trial_spawner_detection_ominous", DIRECTIONAL),
+    TRIAL_SPAWNER_DETECTION_OMINOUS(version -> version < 20.5 ? "NONE" : "trial_spawner_detection_ominous", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed randomly when a
      * player is near a vault.
@@ -1574,6 +1574,7 @@ public enum ParticleEffect {
      * @return The NMS instance or {@code null} if the particle isn't supported in the current minecraft version.
      */
     public Object getNMSObject() {
+        System.out.println(getFieldName());
         if (NMS_EFFECTS != null && NMS_EFFECTS.containsKey(this))
             return NMS_EFFECTS.get(this);
         String fieldName = getFieldName();
