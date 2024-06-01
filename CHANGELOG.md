@@ -1,3 +1,10 @@
+# [1.1.0-alpha.6](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.5...v1.1.0-alpha.6) (2024-06-01)
+
+
+### Features
+
+* 1.20.6 support & add missing particles from 1.20+ ([#2](https://github.com/GeorgeV220/ParticleLib/issues/2)) ([564c65f](https://github.com/GeorgeV220/ParticleLib/commit/564c65f3ce9e4cd71c66473868b1d8dc9bd06113))
+
 # [1.1.0-alpha.5](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0-alpha.4...v1.1.0-alpha.5) (2024-06-01)
 
 
