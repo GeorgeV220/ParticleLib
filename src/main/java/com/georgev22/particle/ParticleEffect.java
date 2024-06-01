@@ -1574,7 +1574,6 @@ public enum ParticleEffect {
      * @return The NMS instance or {@code null} if the particle isn't supported in the current minecraft version.
      */
     public Object getNMSObject() {
-        System.out.println(getFieldName());
         if (NMS_EFFECTS != null && NMS_EFFECTS.containsKey(this))
             return NMS_EFFECTS.get(this);
         String fieldName = getFieldName();
