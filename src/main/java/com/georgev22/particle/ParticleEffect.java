@@ -64,6 +64,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #BUBBLE_POP}</li>
  * <li>{@link #CAMPFIRE_COSY_SMOKE}</li>
  * <li>{@link #CAMPFIRE_SIGNAL_SMOKE}</li>
+ * <li>{@link #CHERRY_LEAVES}</li>
  * <li>{@link #CLOUD}</li>
  * <li>{@link #COMPOSTER}</li>
  * <li>{@link #CRIMSON_SPORE}</li>
@@ -80,6 +81,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #DRIPPING_HONEY}</li>
  * <li>{@link #DRIPPING_OBSIDIAN_TEAR}</li>
  * <li>{@link #DUST_COLOR_TRANSITION}</li>
+ * <li>{@link #DUST_PLUME}</li>
  * <li>{@link #ELECTRIC_SPARK}</li>
  * <li>{@link #ENCHANTMENT_TABLE}</li>
  * <li>{@link #END_ROD}</li>
@@ -99,7 +101,12 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #FOOTSTEP}</li>
  * <li>{@link #GLOW}</li>
  * <li>{@link #GLOW_SQUID_INK}</li>
+ * <li>{@link #GUST}</li>
+ * <li>{@link #GUST_EMITTER_SMALL}</li>
+ * <li>{@link #GUST_EMITTER_LARGE}</li>
  * <li>{@link #HEART}</li>
+ * <li>{@link #INFESTED}</li>
+ * <li>{@link #ITEM_COBWEB}</li>
  * <li>{@link #ITEM_CRACK}</li>
  * <li>{@link #LANDING_HONEY}</li>
  * <li>{@link #LANDING_OBSIDIAN_TEAR}</li>
@@ -108,7 +115,9 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #MOB_APPEARANCE}</li>
  * <li>{@link #NAUTILUS}</li>
  * <li>{@link #NOTE}</li>
+ * <li>{@link #OMINOUS_SPAWNING}</li>
  * <li>{@link #PORTAL}</li>
+ * <li>{@link #RAID_OMEN}</li>
  * <li>{@link #REDSTONE}</li>
  * <li>{@link #REVERSE_PORTAL}</li>
  * <li>{@link #SCRAPE}</li>
@@ -118,6 +127,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #SHRIEK}</li>
  * <li>{@link #SLIME}</li>
  * <li>{@link #SMALL_FLAME}</li>
+ * <li>{@link #SMALL_GUST}</li>
  * <li>{@link #SMOKE_LARGE}</li>
  * <li>{@link #SMOKE_NORMAL}</li>
  * <li>{@link #SNEEZE}</li>
@@ -140,6 +150,10 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #SWEEP_ATTACK}</li>
  * <li>{@link #TOTEM}</li>
  * <li>{@link #TOWN_AURA}</li>
+ * <li>{@link #TRIAL_OMEN}</li>
+ * <li>{@link #TRIAL_SPAWNER_DETECTION}</li>
+ * <li>{@link #TRIAL_SPAWNER_DETECTION_OMINOUS}</li>
+ * <li>{@link #VAULT_CONNECTION}</li>
  * <li>{@link #VIBRATION}</li>
  * <li>{@link #VILLAGER_ANGRY}</li>
  * <li>{@link #VILLAGER_HAPPY}</li>
@@ -151,6 +165,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #WAX_OFF}</li>
  * <li>{@link #WAX_ON}</li>
  * <li>{@link #WHITE_ASH}</li>
+ * <li>{@link #WHITE_SMOKE}</li>
  * </ul>
  *
  * @author ByteZ
@@ -272,6 +287,17 @@ public enum ParticleEffect {
      * </ul>
      */
     CAMPFIRE_SIGNAL_SMOKE(version -> version < 14 ? "NONE" : "campfire_signal_smoke", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is displayed falling off cherry leaves
+     * in cherry grove biomes.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Pink square.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * </ul>
+     */
+    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : version < 20 ? "falling_cherry_leaves" : "cherry_leaves"),
     /**
      * In vanilla, this particle is displayed when an entity dies.
      * <p>
@@ -453,6 +479,17 @@ public enum ParticleEffect {
      * </ul>
      */
     DUST_COLOR_TRANSITION(version -> version < 17 ? "NONE" : "dust_color_transition", COLORABLE, DUST),
+    /**
+     * In vanilla, this particle is shown when adding items to decorated pots.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Little piece of a texture</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * <li>Extra: This Particle gets a random velocity up.</li>
+     * </ul>
+     */
+    DUST_PLUME(version -> version < 20.5 ? "NONE" : "dust_plume", DUST),
     /**
      * In vanilla, this particle appears when a lightning bolt hits
      * copper blocks.
@@ -669,6 +706,38 @@ public enum ParticleEffect {
      */
     GLOW_SQUID_INK(version -> version < 17 ? "NONE" : "glow_squid_ink", DIRECTIONAL),
     /**
+     * In vanilla, this particle is created when a wind charge hits a block.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: A small explosion with a swirl</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * </ul>
+     */
+    GUST(version -> version < 20.3 ? "NONE" : "gust", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is created when a wind charge hits a block.
+     * Spawns a number of gust particles.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Multiple small explosions with a swirl</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * </ul>
+     */
+    GUST_EMITTER_SMALL(version -> version < 20.5 ? "NONE" : "gust_emitter_small", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is created when a wind charge hits a block.
+     * Spawns a number of gust particles.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Multiple large explosions with a swirl</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * </ul>
+     */
+    GUST_EMITTER_LARGE(version -> version < 20.5 ? "NONE" : "gust_emitter_large", DIRECTIONAL),
+    /**
      * In vanilla, this particle is displayed when taming or
      * breeding animals.
      * <p>
@@ -679,6 +748,30 @@ public enum ParticleEffect {
      * </ul>
      */
     HEART(version -> version < 8 ? "NONE" : (version < 13 ? "HEART" : "heart")),
+    /**
+     * In vanilla, this particle is displayed when an entity is
+     * infected.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Small gray X-shaped particle.</li>
+     * <li>Extra:<ul>
+     * <li> The velocity of this particle can be set. The amount has to be 0.</li>
+     * </ul>
+     */
+    INFESTED(version -> version < 20.5 ? "NONE" : "infested", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is displayed by entities with
+     * the weaving effect.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Small white random shaped particle.</li>
+     * <li>Extra:<ul>
+     * <li> The velocity of this particle can be set. The amount has to be 0.</li>
+     * </ul>
+     */
+    ITEM_COBWEB(version -> version < 20.5 ? "NONE" : "item_cobweb", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a tool is
      * broken, an egg or a splash potion hits an entity or a block, It is
@@ -773,6 +866,18 @@ public enum ParticleEffect {
      */
     NOTE(version -> version < 8 ? "NONE" : (version < 13 ? "NOTE" : "note"), COLORABLE),
     /**
+     * In vanilla, it is unknown how this particle spawns.
+     * // TODO: Update description once a use-case is defined.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Tiny light blue square.</li>
+     * <li>Speed value: Influences the spread of this particle effect.</li>
+     * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
+     * </ul>
+     */
+    OMINOUS_SPAWNING(version -> version < 20.5 ? "NONE" : "ominous_spawning", DIRECTIONAL),
+    /**
      * In vanilla, this particle is randomly displayed by nether
      * portal, endermen, ender chests, dragon eggs, endermites and end
      * gateway portals. It is also displayed when an ender pearl hits
@@ -787,6 +892,17 @@ public enum ParticleEffect {
      * </ul>
      */
     PORTAL(version -> version < 8 ? "NONE" : (version < 13 ? "PORTAL" : "portal"), DIRECTIONAL),
+    /**
+     * In vanilla, this particle is displayed by players and mobs with
+     * the Raid Omen effect.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Red skull.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * </ul>
+     */
+    RAID_OMEN(version -> version < 20.5 ? "NONE" : "raid_omen"),
     /**
      * In vanilla, this particle is randomly displayed by active
      * redstone ore, active redstone, active redstone repeater and
@@ -889,6 +1005,17 @@ public enum ParticleEffect {
      * </ul>
      */
     SMALL_FLAME(version -> version < 17 ? "NONE" : "small_flame", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is produced by mobs with the Wind Charged effect.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: A white circular motion.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
+     * </ul>
+     */
+    SMALL_GUST(version -> version < 20.5 ? "NONE" : "small_gust", DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed by fire, furnace
      * minecarts and blazes. It's also displayed when trying to place water
@@ -1041,7 +1168,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    SPELL_MOB_AMBIENT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB_AMBIENT" : "ambient_entity_effect"), COLORABLE),
+    SPELL_MOB_AMBIENT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB_AMBIENT" : version > 20.4 ? "NONE" : "ambient_entity_effect"), COLORABLE),
     /**
      * In vanilla, this particle is displayed randomly by witches.
      * <p>
@@ -1144,6 +1271,49 @@ public enum ParticleEffect {
      * </ul>
      */
     TOWN_AURA(version -> version < 8 ? "NONE" : (version < 13 ? "TOWN_AURA" : "mycelium"), DIRECTIONAL),
+    /**
+     * In vanilla, this particle is displayed by players and mobs with
+     * the Trial Omen effect.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Blue skull.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * </ul>
+     */
+    TRIAL_OMEN(version -> version < 20.5 ? "NONE" : "trial_omen"),
+    /**
+     * In vanilla, this particle is displayed when a Trial Spawner is activated.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Small orange line.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * <li>Extra: The velocity of this particle can be set.</li>
+     * </ul>
+     */
+    TRIAL_SPAWNER_DETECTION(version -> version < 20.3 ? "NONE" : "trial_spawner_detection", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is displayed when an Ominous Trial Spawner is activated.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Small orange line.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * <li>Extra: The velocity of this particle can be set.</li>
+     * </ul>
+     */
+    TRIAL_SPAWNER_DETECTION_OMINOUS(version -> version < 20.5 ? "NONE" : "trial_spawner_detection_ominous", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is displayed randomly when a
+     * player is near a vault.
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Orange drop.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * </ul>
+     */
+    VAULT_CONNECTION(version -> version < 20.5 ? "NONE" : "vault_connection"),
     /**
      * In vanilla, this particle is displayed when a sculk sensor is triggered.
      * <p>
@@ -1273,7 +1443,17 @@ public enum ParticleEffect {
      * <li>Extra: This Particle gets a random velocity in the -x and -z directiont while falling down.</li>
      * </ul>
      */
-    WHITE_ASH(version -> version < 16 ? "NONE" : "white_ash");
+    WHITE_ASH(version -> version < 16 ? "NONE" : "white_ash"),
+    /**
+     * In vanilla, it is unknown how this particle spawns.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Little white cloud.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * </ul>
+     */
+    WHITE_SMOKE(version -> version < 20.3 ? "NONE" : "white_smoke", DIRECTIONAL);
 
     /**
      * An array with all {@link ParticleEffect ParticleEffects}.
@@ -1666,4 +1846,27 @@ public enum ParticleEffect {
                 .forEach(p -> ReflectionUtils.sendPacket(p, nmsPacket));
     }
 
+    /**
+     * Gets the field name mapper function.
+     *
+     * @return The field name mapper function.
+     */
+    public DoubleFunction<String> getFieldNameMapper() {
+        return fieldNameMapper;
+    }
+
+    /**
+     * Gets a ParticleEffect by name.
+     *
+     * @param name The name of the ParticleEffect.
+     * @return The ParticleEffect corresponding to the given name, or null if not found.
+     */
+    public static ParticleEffect getParticle(String name) {
+        return Arrays.stream(ParticleEffect.values())
+                .filter(particleEffect -> particleEffect.name().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
+

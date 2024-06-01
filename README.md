@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-  <b>A spigot library supporting all particles from <code>1.8</code> to <code>1.19.3</code></b><br><br>
+  <b>A spigot library supporting all particles from <code>1.8</code> to <code>1.20.6</code></b><br><br>
   <a href="https://app.codacy.com/manual/GeorgeV220/ParticleLib?utm_source=github.com&utm_medium=referral&utm_content=GeorgeV220/ParticleLib&utm_campaign=Badge_Grade_Dashboard">
     <img src="https://api.codacy.com/project/badge/Grade/166f125b74014326831ca21c1d7df65b" alt="codacy"/>
   </a>
@@ -30,7 +30,7 @@ Open an issue for a bug or feature request. **Don't** open an issue to ask for s
 
 ## Features
 
-* Multiversion support from 1.8 - 1.19.3 <sup>(All in one Jar)</sup>
+* Multiversion support from 1.8 - 1.20.6 <sup>(All in one Jar)</sup>
 * Colored particles
 * Particles with custom velocities
 * Particles with textures
@@ -49,7 +49,7 @@ The latest version <img src="https://img.shields.io/github/v/release/GeorgeV220/
     <dependency>
         <groupId>com.georgev22</groupId>
         <artifactId>particle</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0-alpha.6</version>
     </dependency>
 </dependencies>
 ```
@@ -58,7 +58,7 @@ The latest version <img src="https://img.shields.io/github/v/release/GeorgeV220/
 
 ```groovy
 dependencies {
-    implementation 'com.georgev22:particle:1.0.0'
+    implementation 'com.georgev22:particle:1.1.0-alpha.6'
 }
 ```
 

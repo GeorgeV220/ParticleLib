@@ -369,6 +369,10 @@
       {
         "from": 18,
         "value": "a"
+      },
+      {
+        "from": 20.2,
+        "value": "b"
       }
     ]
   },
@@ -396,6 +400,10 @@
       {
         "from": 19.4,
         "value": "o"
+      },
+      {
+        "from": 20,
+        "value": "n"
       }
     ]
   },
@@ -411,6 +419,10 @@
       {
         "from": 17,
         "value": "b"
+      },
+      {
+        "from": 20,
+        "value": "c"
       }
     ]
   },
@@ -428,7 +440,7 @@
   {
     "name": "Registry.ParticleTypeRegistry",
     "min": 13,
-    "max": 19.2,
+    "max": 99,
     "mappings": [
       {
         "from": 13,
@@ -449,13 +461,17 @@
       {
         "from": 19,
         "value": "aa"
+      },
+      {
+        "from": 20,
+        "value": "ab"
       }
     ]
   },
   {
     "name": "Registry.BlockRegistry",
     "min": 17,
-    "max": 19.2,
+    "max": 99,
     "mappings": [
       {
         "from": 17,
@@ -472,6 +488,10 @@
       {
         "from": 19,
         "value": "V"
+      },
+      {
+        "from": 20,
+        "value": "W"
       }
     ]
   },
@@ -494,6 +514,10 @@
       {
         "from": 19.3,
         "value": "k"
+      },
+      {
+        "from": 20.3,
+        "value": "j"
       }
     ]
   },
@@ -505,6 +529,10 @@
       {
         "from": 19.3,
         "value": "f"
+      },
+      {
+        "from": 20.3,
+        "value": "e"
       }
     ]
   }
