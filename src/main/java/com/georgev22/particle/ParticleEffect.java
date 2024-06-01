@@ -294,7 +294,7 @@ public enum ParticleEffect {
      * <b>Information</b>:
      * <ul>
      * <li>Appearance: Pink square.</li>
-     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
     CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : version < 20 ? "falling_cherry_leaves" : "cherry_leaves"),
@@ -485,7 +485,7 @@ public enum ParticleEffect {
      * <b>Information</b>:
      * <ul>
      * <li>Appearance: Little piece of a texture</li>
-     * <li>Speed value: Doesn't influence the particle.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * <li>Extra: This Particle gets a random velocity up.</li>
      * </ul>
      */
@@ -872,7 +872,7 @@ public enum ParticleEffect {
      * <b>Information</b>:
      * <ul>
      * <li>Appearance: Tiny light blue square.</li>
-     * <li>Speed value: Doesn't influence the particle.</li>
+     * <li>Speed value: Influences the spread of this particle effect.</li>
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
@@ -1011,7 +1011,7 @@ public enum ParticleEffect {
      * <b>Information</b>:
      * <ul>
      * <li>Appearance: A white circular motion.</li>
-     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
@@ -1310,7 +1310,7 @@ public enum ParticleEffect {
      * <b>Information</b>:
      * <ul>
      * <li>Appearance: Orange drop.</li>
-     * <li>Speed value: Doesn't influence the particle.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
     VAULT_CONNECTION(version -> version < 20.5 ? "NONE" : "vault_connection"),
