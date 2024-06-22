@@ -194,6 +194,10 @@ public final class ParticleConstants {
      * Represents the CraftItemStack#asNMSCopy(); method.
      */
     public static final Method CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD;
+    /**
+     * Represents the MinecraftKey#parse(); method.
+     */
+    public static final Method MINECRAFT_KEY_METHOD;
 
     /* ---------------- Fields ---------------- */
 
@@ -318,6 +322,7 @@ public final class ParticleConstants {
         CRAFT_PLAYER_GET_HANDLE_METHOD = getMethodOrNull(CRAFT_PLAYER_CLASS, "getHandle");
         BLOCK_GET_BLOCK_DATA_METHOD = getMappedMethod(BLOCK_CLASS, "Block.getBlockData");
         CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD = getMethodOrNull(CRAFT_ITEM_STACK_CLASS, "asNMSCopy", ItemStack.class);
+        MINECRAFT_KEY_METHOD = getMappedMethod(MINECRAFT_KEY_CLASS, "MinecraftKey.parse", String.class);
 
         // Fields
         ENTITY_PLAYER_PLAYER_CONNECTION_FIELD = getMappedField(ENTITY_PLAYER_CLASS, "EntityPlayer.playerConnection", false);

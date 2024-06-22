@@ -404,6 +404,10 @@
       {
         "from": 20,
         "value": "n"
+      },
+      {
+        "from": 21,
+        "value": "o"
       }
     ]
   },
@@ -518,6 +522,10 @@
       {
         "from": 20.3,
         "value": "j"
+      },
+      {
+        "from": 21,
+        "value": "i"
       }
     ]
   },
@@ -533,6 +541,17 @@
       {
         "from": 20.3,
         "value": "e"
+      }
+    ]
+  },
+  {
+    "name": "MinecraftKey.parse",
+    "min": 21,
+    "max": 99,
+    "mappings": [
+      {
+        "from": 21,
+        "value": "a"
       }
     ]
   }
