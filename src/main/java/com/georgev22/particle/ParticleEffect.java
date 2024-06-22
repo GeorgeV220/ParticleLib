@@ -81,6 +81,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #DRIPPING_HONEY}</li>
  * <li>{@link #DRIPPING_OBSIDIAN_TEAR}</li>
  * <li>{@link #DUST_COLOR_TRANSITION}</li>
+ * <li>{@link #DUST_PILLAR}</li>
  * <li>{@link #DUST_PLUME}</li>
  * <li>{@link #ELECTRIC_SPARK}</li>
  * <li>{@link #ENCHANTMENT_TABLE}</li>
@@ -479,6 +480,19 @@ public enum ParticleEffect {
      * </ul>
      */
     DUST_COLOR_TRANSITION(version -> version < 17 ? "NONE" : "dust_color_transition", COLORABLE, DUST),
+    /**
+     * In vanilla, this particle is displayed when a player hits an
+     * entity with a Mace smash attack.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Little piece of a texture.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * <li>Extra:<ul>
+     * <li> This particle needs a block texture in order to work.</li></ul></li>
+     * </ul>
+     */
+    DUST_PILLAR(version -> version < 20.5 ? "NONE" : "dust_pillar", DIRECTIONAL, REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is shown when adding items to decorated pots.
      * <p>

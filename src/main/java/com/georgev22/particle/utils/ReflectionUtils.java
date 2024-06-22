@@ -425,6 +425,10 @@ public final class ReflectionUtils {
         if (key == null)
             return null;
         try {
+            // Minecraft removed the MinecraftKey constructor in 1.21 in favor of a static method.
+            if (MINECRAFT_VERSION > 20.6) {
+                return ParticleConstants.MINECRAFT_KEY_METHOD.invoke(null, key);
+            }
             return ParticleConstants.MINECRAFT_KEY_CONSTRUCTOR.newInstance(key);
         } catch (Exception ex) {
             return null;
