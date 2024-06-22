@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.1.0...v1.2.0) (2024-06-22)
+
+
+### Features
+
+* 1.21 support ([#4](https://github.com/GeorgeV220/ParticleLib/issues/4)) ([cfc4ead](https://github.com/GeorgeV220/ParticleLib/commit/cfc4ead048c40c8079ea9fbc80aebc5969e98f8f))
+
 # [1.1.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.0.0...v1.1.0) (2024-06-01)
 
 
