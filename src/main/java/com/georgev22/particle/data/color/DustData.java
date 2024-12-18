@@ -111,11 +111,16 @@ public class DustData extends RegularColor {
                 return new int[0];
             else if (ReflectionUtils.MINECRAFT_VERSION < 17 && getEffect() == ParticleEffect.REDSTONE)
                 return ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(getRed(), getGreen(), getBlue(), getSize());
-            else if (ReflectionUtils.MINECRAFT_VERSION >= 17) {
+            else if (ReflectionUtils.MINECRAFT_VERSION >= 17 && ReflectionUtils.MINECRAFT_VERSION < 21.3) {
                 Object colorVector = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
                 return getEffect() == ParticleEffect.REDSTONE
                         ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(colorVector, getSize())
                         : ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(colorVector, colorVector, getSize());
+            } else if (ReflectionUtils.MINECRAFT_VERSION >= 21.3) {
+                Color color = new Color(getRed(), getGreen(), getBlue());
+                return getEffect() == ParticleEffect.REDSTONE
+                        ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(color.getRGB(), getSize())
+                        : ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(color.getRGB(), color.getRGB(), getSize());
             }
         } catch (Exception ignored) {
         }

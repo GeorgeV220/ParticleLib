@@ -152,11 +152,19 @@ public class RegularColor extends ParticleColor {
             if (getEffect() == ParticleEffect.REDSTONE)
                 return ReflectionUtils.MINECRAFT_VERSION < 17
                         ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(getRed(), getGreen(), getBlue(), 1f)
-                        : ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue()), 1f);
+                        : (ReflectionUtils.MINECRAFT_VERSION < 21.3
+                            ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue()), 1f)
+                            : ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(new Color(getRed(), getGreen(), getBlue()).getRGB(), 1f));
             if (ReflectionUtils.MINECRAFT_VERSION < 17)
                 return null;
-            Object colorVector = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
-            return ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(colorVector, colorVector, 1f);
+            if (ReflectionUtils.MINECRAFT_VERSION < 21.3) {
+                Object colorVector = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
+                return ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(colorVector, colorVector, 1f);
+            }
+
+            Color color = new Color(getRed(), getGreen(), getBlue());
+            return ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(color.getRGB(), color.getRGB(), 1f);
+
         } catch (Exception ex) {
             return null;
         }

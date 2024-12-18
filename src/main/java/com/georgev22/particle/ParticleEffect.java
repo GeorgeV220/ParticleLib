@@ -24,10 +24,7 @@
 
 package com.georgev22.particle;
 
-import com.georgev22.particle.data.ParticleData;
-import com.georgev22.particle.data.SculkChargeData;
-import com.georgev22.particle.data.ShriekData;
-import com.georgev22.particle.data.VibrationData;
+import com.georgev22.particle.data.*;
 import com.georgev22.particle.data.color.*;
 import com.georgev22.particle.data.texture.BlockTexture;
 import com.georgev22.particle.data.texture.ItemTexture;
@@ -58,6 +55,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #ASH}</li>
  * <li>{@link #BARRIER}</li>
  * <li>{@link #BLOCK_CRACK}</li>
+ * <li>{@link #BLOCK_CRUMBLE}</li>
  * <li>{@link #BLOCK_DUST}</li>
  * <li>{@link #BUBBLE_COLUMN_UP}</li>
  * <li>{@link #BLOCK_MARKER}</li>
@@ -151,6 +149,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #SWEEP_ATTACK}</li>
  * <li>{@link #TOTEM}</li>
  * <li>{@link #TOWN_AURA}</li>
+ * <li>{@link #TRAIL}</li>
  * <li>{@link #TRIAL_OMEN}</li>
  * <li>{@link #TRIAL_SPAWNER_DETECTION}</li>
  * <li>{@link #TRIAL_SPAWNER_DETECTION_OMINOUS}</li>
@@ -215,6 +214,19 @@ public enum ParticleEffect {
      * </ul>
      */
     BLOCK_CRACK(version -> version < 8 ? "NONE" : (version < 13 ? "BLOCK_CRACK" : "block"), REQUIRES_BLOCK),
+    /**
+     * In vanilla, this particle is displayed when a player breaks
+     * a block or sprints. It's also displayed by iron golems while
+     * walking.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Little piece of a texture.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * <li>Extra: This particle needs a block texture in order to work.</li>
+     * </ul>
+     */
+    BLOCK_CRUMBLE(version -> version < 21.3 ? "NONE" : "block_crumble", REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is displayed when an entity hits the ground
      * after falling. It's also displayed when an armorstand is broken.
@@ -1285,6 +1297,16 @@ public enum ParticleEffect {
      * </ul>
      */
     TOWN_AURA(version -> version < 8 ? "NONE" : (version < 13 ? "TOWN_AURA" : "mycelium"), DIRECTIONAL),
+    /**
+     * In vanilla, it is unknown how this particle spawns at this moment. This is an experimental particle.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: swirly-colored particle.</li>
+     * <li>Extra: The color and target of this particle can be set with {@link TrailData}.</li>
+     * </ul>
+     */
+    TRAIL(version -> version < 21.3 ? "NONE" : "trail"),
     /**
      * In vanilla, this particle is displayed by players and mobs with
      * the Trial Omen effect.

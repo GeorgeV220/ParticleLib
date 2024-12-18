@@ -452,6 +452,22 @@ public final class ReflectionUtils {
     }
 
     /**
+     * Creates a new Vec3D instance.
+     *
+     * @param x x value of the vector.
+     * @param y y value of the vector.
+     * @param z z value of the vector.
+     * @return a Vec3D instance with the specified coordinates.
+     */
+    public static Object createVec3D(double x, double y, double z) {
+        try {
+            return ParticleConstants.VEC_3D_CONSTRUCTOR.newInstance(x, y, z);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
      * Creates a new BlockPosition.
      *
      * @param location the {@link Location} of the block.

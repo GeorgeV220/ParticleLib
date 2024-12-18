@@ -343,6 +343,17 @@
     ]
   },
   {
+    "name": "ParticleParamTargetColor",
+    "min": 19,
+    "max": 99,
+    "mappings": [
+      {
+        "from": 21.3,
+        "value": "core.particles.TargetColorParticleOption"
+      }
+    ]
+  },
+  {
     "name": "Registry.get",
     "min": 13,
     "max": 99,
@@ -408,6 +419,10 @@
       {
         "from": 21,
         "value": "o"
+      },
+      {
+        "from": 21.3,
+        "value": "m"
       }
     ]
   },
@@ -427,6 +442,10 @@
       {
         "from": 20,
         "value": "c"
+      },
+      {
+        "from": 21.3,
+        "value": "f"
       }
     ]
   },
