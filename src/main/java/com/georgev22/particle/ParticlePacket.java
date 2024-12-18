@@ -24,10 +24,7 @@
 
 package com.georgev22.particle;
 
-import com.georgev22.particle.data.ParticleData;
-import com.georgev22.particle.data.SculkChargeData;
-import com.georgev22.particle.data.ShriekData;
-import com.georgev22.particle.data.VibrationData;
+import com.georgev22.particle.data.*;
 import com.georgev22.particle.data.color.DustData;
 import com.georgev22.particle.data.color.NoteColor;
 import com.georgev22.particle.data.color.ParticleColor;
@@ -267,6 +264,7 @@ public final class ParticlePacket {
                         || (data instanceof VibrationData && version >= 17)
                         || (data instanceof ShriekData && version >= 19)
                         || (data instanceof SculkChargeData && version >= 19)
+                        || (data instanceof TrailData && version >= 21.3)
                         || (data instanceof RegularColor && (version >= 17 && effect.hasProperty(PropertyType.DUST))))
                     return createGenericParticlePacket(location, nmsData);
                 if ((data instanceof BlockTexture && effect.hasProperty(PropertyType.REQUIRES_BLOCK))

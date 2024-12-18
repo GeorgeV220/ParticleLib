@@ -72,6 +72,10 @@ public final class ParticleConstants {
      */
     public static final Class VECTOR_3FA_CLASS;
     /**
+     * Represents the Vec3D class.
+     */
+    public static final Class VEC_3D_CLASS;
+    /**
      * Represents the abstract IRegistry class.
      */
     public static final Class REGISTRY_CLASS;
@@ -168,6 +172,11 @@ public final class ParticleConstants {
      */
     public static final Class PARTICLE_PARAM_SCULK_CHARGE_CLASS;
 
+    /**
+     * Represents the TrailParticleOption class.
+     */
+    public static final Class TRAIL_PARTICLE_OPTION_CLASS;
+
     /* ---------------- Methods ---------------- */
 
     /**
@@ -221,6 +230,10 @@ public final class ParticleConstants {
      */
     public static final Constructor VECTOR_3FA_CONSTRUCTOR;
     /**
+     * Represents the Vec3D constructor.
+     */
+    public static final Constructor VEC_3D_CONSTRUCTOR;
+    /**
      * Represents the BlockPosition constructor.
      */
     public static final Constructor BLOCK_POSITION_CONSTRUCTOR;
@@ -264,6 +277,10 @@ public final class ParticleConstants {
      * Represents the ParticleParamSculkCharge constructor.
      */
     public static final Constructor PARTICLE_PARAM_SCULK_CHARGE_CONSTRUCTOR;
+    /**
+     * Represents the TrailParticleOption constructor.
+     */
+    public static final Constructor TRAIL_PARTICLE_OPTION_CONSTRUCTOR;
 
 
     /* ---------------- Object constants ---------------- */
@@ -290,6 +307,7 @@ public final class ParticleConstants {
         PARTICLE_CLASS = getMappedClass("Particle");
         MINECRAFT_KEY_CLASS = getMappedClass("MinecraftKey");
         VECTOR_3FA_CLASS = version < 17 ? getNMSClass("Vector3f") : (version < 19.3 ? getClassSafe("com.mojang.math.Vector3fa") : getClassSafe("org.joml.Vector3f"));
+        VEC_3D_CLASS = getNMSClass("world.phys.Vec3D");
         REGISTRY_CLASS = getMappedClass("IRegistry");
         BUILT_IN_REGISTRIES_CLASS = getMappedClass("BuiltInRegistries");
         BLOCK_CLASS = getMappedClass("Block");
@@ -314,6 +332,7 @@ public final class ParticleConstants {
         PARTICLE_PARAM_VIBRATION_CLASS = getMappedClass("ParticleParamVibration");
         PARTICLE_PARAM_SHRIEK_CLASS = getMappedClass("ParticleParamShriek");
         PARTICLE_PARAM_SCULK_CHARGE_CLASS = getMappedClass("ParticleParamSculkCharge");
+        TRAIL_PARTICLE_OPTION_CLASS = getMappedClass("ParticleParamTargetColor");
 
         // Methods
         REGISTRY_GET_METHOD = getMappedMethod(REGISTRY_CLASS, "Registry.get", MINECRAFT_KEY_CLASS);
@@ -337,6 +356,7 @@ public final class ParticleConstants {
 
         MINECRAFT_KEY_CONSTRUCTOR = getConstructorOrNull(MINECRAFT_KEY_CLASS, String.class);
         VECTOR_3FA_CONSTRUCTOR = getConstructorOrNull(VECTOR_3FA_CLASS, float.class, float.class, float.class);
+        VEC_3D_CONSTRUCTOR = getConstructorOrNull(VEC_3D_CLASS, double.class, double.class, double.class);
         BLOCK_POSITION_CONSTRUCTOR = getConstructorOrNull(BLOCK_POSITION_CLASS, double.class, double.class, double.class);
         BLOCK_POSITION_SOURCE_CONSTRUCTOR = version < 17 ? null : getConstructorOrNull(BLOCK_POSITION_SOURCE_CLASS, BLOCK_POSITION_CLASS);
         if (version < 17)
@@ -352,10 +372,17 @@ public final class ParticleConstants {
             PARTICLE_PARAM_REDSTONE_CONSTRUCTOR = null;
         else if (version < 17)
             PARTICLE_PARAM_REDSTONE_CONSTRUCTOR = getConstructorOrNull(PARTICLE_PARAM_REDSTONE_CLASS, float.class, float.class, float.class, float.class);
-        else
+        else if (version < 21.3)
             PARTICLE_PARAM_REDSTONE_CONSTRUCTOR = getConstructorOrNull(PARTICLE_PARAM_REDSTONE_CLASS, VECTOR_3FA_CLASS, float.class);
+        else
+            PARTICLE_PARAM_REDSTONE_CONSTRUCTOR = getConstructorOrNull(PARTICLE_PARAM_REDSTONE_CLASS, int.class, float.class);
 
-        PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR = version < 17 ? null : getConstructorOrNull(PARTICLE_PARAM_DUST_COLOR_TRANSITION_CLASS, VECTOR_3FA_CLASS, VECTOR_3FA_CLASS, float.class);
+        PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR = version < 17
+                ? null
+                : (version < 21.3
+                    ? getConstructorOrNull(PARTICLE_PARAM_DUST_COLOR_TRANSITION_CLASS, VECTOR_3FA_CLASS, VECTOR_3FA_CLASS, float.class)
+                    : getConstructorOrNull(PARTICLE_PARAM_DUST_COLOR_TRANSITION_CLASS, int.class, int.class, float.class));
+
         PARTICLE_PARAM_BLOCK_CONSTRUCTOR = version < 13 ? null : getConstructorOrNull(PARTICLE_PARAM_BLOCK_CLASS, PARTICLE_CLASS, BLOCK_DATA_INTERFACE);
         PARTICLE_PARAM_ITEM_CONSTRUCTOR = version < 13 ? null : getConstructorOrNull(PARTICLE_PARAM_ITEM_CLASS, PARTICLE_CLASS, ITEM_STACK_CLASS);
         if (version < 17)
@@ -366,6 +393,11 @@ public final class ParticleConstants {
             PARTICLE_PARAM_VIBRATION_CONSTRUCTOR = getConstructorOrNull(PARTICLE_PARAM_VIBRATION_CLASS, POSITION_SOURCE_CLASS, int.class);
         PARTICLE_PARAM_SHRIEK_CONSTRUCTOR = version < 19 ? null : getConstructorOrNull(PARTICLE_PARAM_SHRIEK_CLASS, int.class);
         PARTICLE_PARAM_SCULK_CHARGE_CONSTRUCTOR = version < 19 ? null : getConstructorOrNull(PARTICLE_PARAM_SCULK_CHARGE_CLASS, float.class);
+        TRAIL_PARTICLE_OPTION_CONSTRUCTOR = version < 21.3
+                ? null
+                : (version < 21.4
+                    ? getConstructorOrNull(TRAIL_PARTICLE_OPTION_CLASS, VEC_3D_CLASS, int.class)
+                    : getConstructorOrNull(TRAIL_PARTICLE_OPTION_CLASS, VEC_3D_CLASS, int.class, int.class));
 
         // Constants
         PARTICLE_TYPE_REGISTRY = readField(

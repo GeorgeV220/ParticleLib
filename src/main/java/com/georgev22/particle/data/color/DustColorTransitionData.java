@@ -134,12 +134,23 @@ public final class DustColorTransitionData extends DustData {
     public Object toNMSData() {
         if (ReflectionUtils.MINECRAFT_VERSION < 17 || getEffect() != ParticleEffect.DUST_COLOR_TRANSITION)
             return null;
-        Object fadeStart = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
-        Object fadeEnd = ReflectionUtils.createVector3fa(getFadeRed(), getFadeGreen(), getFadeBlue());
-        try {
-            return ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(fadeStart, fadeEnd, getSize());
-        } catch (Exception ex) {
-            return null;
+        if (ReflectionUtils.MINECRAFT_VERSION < 21.3) {
+            Object fadeStart = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
+            Object fadeEnd = ReflectionUtils.createVector3fa(getFadeRed(), getFadeGreen(), getFadeBlue());
+            try {
+                return ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(fadeStart, fadeEnd, getSize());
+            } catch (Exception ex) {
+                return null;
+            }
+        } else {
+            Color fadeStart = new Color(getRed(), getGreen(), getBlue());
+            Color fadeEnd = new Color(getFadeRed(), getFadeGreen(), getFadeBlue());
+
+            try {
+                return ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(fadeStart.getRGB(), fadeEnd.getRGB(), getSize());
+            } catch (Exception ex) {
+                return null;
+            }
         }
     }
 }
