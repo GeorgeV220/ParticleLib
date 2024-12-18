@@ -30,7 +30,7 @@ Open an issue for a bug or feature request. **Don't** open an issue to ask for s
 
 ## Features
 
-* Multiversion support from 1.8 - 1.21 <sup>(All in one Jar)</sup>
+* Multiversion support from 1.8 - 1.21.4 <sup>(All in one Jar)</sup>
 * Colored particles
 * Particles with custom velocities
 * Particles with textures
