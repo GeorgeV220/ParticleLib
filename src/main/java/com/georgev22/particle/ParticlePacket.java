@@ -387,7 +387,10 @@ public final class ParticlePacket {
                 return packetConstructor.newInstance(param, true, locationX, locationY, locationZ, offsetX, offsetY, offsetZ, speed, amount, data);
             if (ReflectionUtils.MINECRAFT_VERSION < 15)
                 return packetConstructor.newInstance(param, true, locationX, locationY, locationZ, offsetX, offsetY, offsetZ, speed, amount);
-            return packetConstructor.newInstance(param, true, (double) locationX, (double) locationY, (double) locationZ, offsetX, offsetY, offsetZ, speed, amount);
+            if (ReflectionUtils.MINECRAFT_VERSION < 21.4) {
+                return packetConstructor.newInstance(param, true, (double) locationX, (double) locationY, (double) locationZ, offsetX, offsetY, offsetZ, speed, amount);
+            }
+            return packetConstructor.newInstance(param, true, true, (double) locationX, (double) locationY, (double) locationZ, offsetX, offsetY, offsetZ, speed, amount);
         } catch (Exception ex) {
             return null;
         }
