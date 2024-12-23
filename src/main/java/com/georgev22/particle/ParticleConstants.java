@@ -332,7 +332,7 @@ public final class ParticleConstants {
         PARTICLE_PARAM_VIBRATION_CLASS = getMappedClass("ParticleParamVibration");
         PARTICLE_PARAM_SHRIEK_CLASS = getMappedClass("ParticleParamShriek");
         PARTICLE_PARAM_SCULK_CHARGE_CLASS = getMappedClass("ParticleParamSculkCharge");
-        TRAIL_PARTICLE_OPTION_CLASS = getMappedClass("ParticleParamTargetColor");
+        TRAIL_PARTICLE_OPTION_CLASS = getMappedClass("TrailParticleOption");
 
         // Methods
         REGISTRY_GET_METHOD = getMappedMethod(REGISTRY_CLASS, "Registry.get", MINECRAFT_KEY_CLASS);
@@ -351,8 +351,10 @@ public final class ParticleConstants {
             PACKET_PLAY_OUT_WORLD_PARTICLES_CONSTRUCTOR = getConstructorOrNull(PACKET_PLAY_OUT_WORLD_PARTICLES_CLASS, PARTICLE_ENUM, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class);
         else if (version < 15)
             PACKET_PLAY_OUT_WORLD_PARTICLES_CONSTRUCTOR = getConstructorOrNull(PACKET_PLAY_OUT_WORLD_PARTICLES_CLASS, PARTICLE_PARAM_CLASS, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
-        else
+        else if (version < 21.4)
             PACKET_PLAY_OUT_WORLD_PARTICLES_CONSTRUCTOR = getConstructorOrNull(PACKET_PLAY_OUT_WORLD_PARTICLES_CLASS, PARTICLE_PARAM_CLASS, boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class);
+        else
+            PACKET_PLAY_OUT_WORLD_PARTICLES_CONSTRUCTOR = getConstructorOrNull(PACKET_PLAY_OUT_WORLD_PARTICLES_CLASS, PARTICLE_PARAM_CLASS, boolean.class, boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class);
 
         MINECRAFT_KEY_CONSTRUCTOR = getConstructorOrNull(MINECRAFT_KEY_CLASS, String.class);
         VECTOR_3FA_CONSTRUCTOR = getConstructorOrNull(VECTOR_3FA_CLASS, float.class, float.class, float.class);

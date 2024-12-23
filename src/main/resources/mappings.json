@@ -343,13 +343,17 @@
     ]
   },
   {
-    "name": "ParticleParamTargetColor",
+    "name": "TrailParticleOption",
     "min": 19,
     "max": 99,
     "mappings": [
       {
         "from": 21.3,
         "value": "core.particles.TargetColorParticleOption"
+      },
+      {
+        "from": 21.4,
+        "value": "core.particles.TrailParticleOption"
       }
     ]
   },
