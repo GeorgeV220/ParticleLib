@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.3.0...v1.3.1) (2024-12-23)
+
+
+### Bug Fixes
+
+* Account for final 1.21.4 protocol changes ([#6](https://github.com/GeorgeV220/ParticleLib/issues/6)) ([b71aadb](https://github.com/GeorgeV220/ParticleLib/commit/b71aadb50dd51dfbd5ef2c6fc068f4ac7000be8f))
+
 # [1.3.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.2.0...v1.3.0) (2024-12-18)
 
 
