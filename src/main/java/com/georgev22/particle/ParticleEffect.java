@@ -310,7 +310,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : version < 20 ? "falling_cherry_leaves" : "cherry_leaves"),
+    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : version < 20 ? "falling_cherry_leaves" : "cherry_leaves", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when an entity dies.
      * <p>
