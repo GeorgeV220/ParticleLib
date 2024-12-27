@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/GeorgeV220/ParticleLib/compare/v1.3.1...v1.3.2) (2024-12-27)
+
+
+### Bug Fixes
+
+* update min version for TrailParticleOption and particle effect fixes ([#7](https://github.com/GeorgeV220/ParticleLib/issues/7)) ([67dc21a](https://github.com/GeorgeV220/ParticleLib/commit/67dc21ac8abf9529d058cbd90c5091e375ee83fd))
+
 ## [1.3.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.3.0...v1.3.1) (2024-12-23)
 
 
