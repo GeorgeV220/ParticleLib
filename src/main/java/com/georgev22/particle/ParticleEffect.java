@@ -115,6 +115,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #NAUTILUS}</li>
  * <li>{@link #NOTE}</li>
  * <li>{@link #OMINOUS_SPAWNING}</li>
+ * <li>{@link #PALE_OAK_LEAVES}</li>
  * <li>{@link #PORTAL}</li>
  * <li>{@link #RAID_OMEN}</li>
  * <li>{@link #REDSTONE}</li>
@@ -310,7 +311,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : version < 20 ? "falling_cherry_leaves" : "cherry_leaves"),
+    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : version < 20 ? "falling_cherry_leaves" : "cherry_leaves", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when an entity dies.
      * <p>
@@ -903,6 +904,17 @@ public enum ParticleEffect {
      * </ul>
      */
     OMINOUS_SPAWNING(version -> version < 20.5 ? "NONE" : "ominous_spawning", DIRECTIONAL),
+    /**
+     * In vanilla, this particle is displayed falling off pale oak leaves
+     * in pale garden biomes.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Gray leaf.</li>
+     * <li>Speed value: Doesn't influence the particle.</li>
+     * </ul>
+     */
+    PALE_OAK_LEAVES(version -> version < 21.4 ? "NONE" : "pale_oak_leaves", DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed by nether
      * portal, endermen, ender chests, dragon eggs, endermites and end

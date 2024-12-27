@@ -344,7 +344,7 @@
   },
   {
     "name": "TrailParticleOption",
-    "min": 19,
+    "min": 21.3,
     "max": 99,
     "mappings": [
       {
