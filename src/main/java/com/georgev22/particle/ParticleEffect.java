@@ -115,6 +115,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #NAUTILUS}</li>
  * <li>{@link #NOTE}</li>
  * <li>{@link #OMINOUS_SPAWNING}</li>
+ * <li>{@link #PALE_OAK_LEAVES}</li>
  * <li>{@link #PORTAL}</li>
  * <li>{@link #RAID_OMEN}</li>
  * <li>{@link #REDSTONE}</li>
