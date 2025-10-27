@@ -131,7 +131,7 @@ public class ParticleBuilder {
      */
     public ParticleBuilder(ParticleEffect particle) {
         this.particle = particle;
-        this.location = null;
+        location = null;
     }
 
 
@@ -238,9 +238,9 @@ public class ParticleBuilder {
      * @return the current instance to support building operations
      */
     public ParticleBuilder setOffset(Vector offset) {
-        this.offsetX = (float) offset.getX();
-        this.offsetY = (float) offset.getY();
-        this.offsetZ = (float) offset.getZ();
+        offsetX = (float) offset.getX();
+        offsetY = (float) offset.getY();
+        offsetZ = (float) offset.getZ();
         return this;
     }
 
@@ -339,8 +339,25 @@ public class ParticleBuilder {
      * @return the current instance to support building operations
      */
     public ParticleBuilder setColor(Color color) {
-        if (this.particle.hasProperty(PropertyType.COLORABLE))
-            this.particleData = new RegularColor(color);
+        if (particle.hasProperty(PropertyType.COLORABLE))
+            particleData = new RegularColor(color);
+        return this;
+    }
+
+    /**
+     * Sets the color of the particle. Note that particle
+     * needs the {@link PropertyType#COLORABLE} PropertyType
+     * to work.
+     *
+     * @param color the {@link Color} of the particle.
+     * @param alpha the alpha/brightness value of the color.
+     *              A value of 1f means full brightness. (Introduced in 1.20.5)
+     *              Using this parameter below 1.20.5 will have no effect.
+     * @return the current instance to support building operations
+     */
+    public ParticleBuilder setColor(Color color, float alpha) {
+        if (particle.hasProperty(PropertyType.COLORABLE))
+            particleData = new RegularColor(color, alpha);
         return this;
     }
 
@@ -353,10 +370,10 @@ public class ParticleBuilder {
     public Object toPacket() {
         if (location == null)
             throw new IllegalStateException("Missing location of particle.");
-        if (this.particleData != null)
-            this.particleData.setEffect(this.particle);
-        ParticlePacket packet = new ParticlePacket(this.particle, this.offsetX, this.offsetY, this.offsetZ, this.speed, this.amount, this.particleData);
-        return packet.createPacket(this.location);
+        if (particleData != null)
+            particleData.setEffect(particle);
+        ParticlePacket packet = new ParticlePacket(particle, offsetX, offsetY, offsetZ, speed, amount, particleData);
+        return packet.createPacket(location);
     }
 
     /**
@@ -374,7 +391,7 @@ public class ParticleBuilder {
      * @param players The players that should see the particle.
      */
     public void display(Player... players) {
-        this.display(Arrays.asList(players));
+        display(Arrays.asList(players));
     }
 
     /**
