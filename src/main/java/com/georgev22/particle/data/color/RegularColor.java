@@ -203,7 +203,7 @@ public class RegularColor extends ParticleColor {
         try {
             // Handle non-Redstone / non-DustColorTransition particles
             if (getEffect() != ParticleEffect.REDSTONE && getEffect() != ParticleEffect.DUST_COLOR_TRANSITION) {
-                if (getEffect().hasProperty(PropertyType.REGULAR_COLOR)) {
+                if (getEffect().hasProperty(PropertyType.REGULAR_COLOR) && ReflectionUtils.MINECRAFT_VERSION >= 20.5) {
                     // Since 1.20.5 we can use ARGB for regular color particles, encoded in ColorParticleOption
                     return ParticleConstants.COLOR_PARTICLE_OPTION_CREATE_METHOD.invoke(null, getEffect().getNMSObject(), toARGB());
                 }

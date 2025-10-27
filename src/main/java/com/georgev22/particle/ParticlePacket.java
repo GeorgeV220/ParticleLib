@@ -375,11 +375,12 @@ public final class ParticlePacket {
 
         // Other colored particles
         if (ReflectionUtils.MINECRAFT_VERSION < 13 || effect != ParticleEffect.REDSTONE) {
-            float redDustGuard = (effect == ParticleEffect.REDSTONE && r == 0f ? Float.MIN_NORMAL : r);
             return createPacket(
                     effect.getNMSObject(),
-                    x, y, z,
-                    redDustGuard, g, b,
+                    x,y,z,
+                    (effect == ParticleEffect.REDSTONE && r == 0 ? Float.MIN_NORMAL : r),
+                    g,
+                    b,
                     1f,
                     0,
                     new int[0]
