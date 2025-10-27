@@ -65,6 +65,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #CHERRY_LEAVES}</li>
  * <li>{@link #CLOUD}</li>
  * <li>{@link #COMPOSTER}</li>
+ * <li>{@link #COPPER_FIRE_FLAME}</li>
  * <li>{@link #CRIMSON_SPORE}</li>
  * <li>{@link #CRIT}</li>
  * <li>{@link #CRIT_MAGIC}</li>
@@ -94,6 +95,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #FALLING_NECTAR}</li>
  * <li>{@link #FALLING_OBSIDIAN_TEAR}</li>
  * <li>{@link #FALLING_SPORE_BLOSSOM}</li>
+ * <li>{@link #FIREFLY}</li>
  * <li>{@link #FIREWORKS_SPARK}</li>
  * <li>{@link #FLAME}</li>
  * <li>{@link #FLASH}</li>
@@ -148,6 +150,7 @@ import static com.georgev22.particle.PropertyType.*;
  * <li>{@link #SUSPENDED}</li>
  * <li>{@link #SUSPENDED_DEPTH}</li>
  * <li>{@link #SWEEP_ATTACK}</li>
+ * <li>{@link #TINTED_LEAVES}</li>
  * <li>{@link #TOTEM}</li>
  * <li>{@link #TOWN_AURA}</li>
  * <li>{@link #TRAIL}</li>
@@ -311,7 +314,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : version < 20 ? "falling_cherry_leaves" : "cherry_leaves", DIRECTIONAL),
+    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : (version < 20 ? "falling_cherry_leaves" : "cherry_leaves"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when an entity dies.
      * <p>
@@ -334,6 +337,17 @@ public enum ParticleEffect {
      * </ul>
      */
     COMPOSTER(version -> version < 14 ? "NONE" : "composter"),
+    /**
+     * In vanilla, this particle is randomly displayed by copper torches.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Green flame.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
+     * </ul>
+     */
+    COPPER_FIRE_FLAME(version -> version < 21.9 ? "NONE" : "copper_fire_flame", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed in the crimson forest
      * nether biome.
@@ -665,6 +679,17 @@ public enum ParticleEffect {
      * </ul>
      */
     FALLING_SPORE_BLOSSOM(version -> version < 17 ? "NONE" : "falling_spore_blossom"),
+    /**
+     * In vanilla, this particle is displayed by firefly
+     * bushes.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: Flashing white square.</li>
+     * <li>Speed value: Influences the velocity at which the particle flies off.</li>
+     * </ul>
+     */
+    FIREFLY(version -> version < 21.5 ? "NONE" : "firefly", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a firework is
      * launched.
@@ -1194,7 +1219,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    SPELL_MOB(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB" : "entity_effect"), COLORABLE),
+    SPELL_MOB(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB" : "entity_effect"), COLORABLE, REGULAR_COLOR),
     /**
      * In vanilla, this particle is displayed when an entity has
      * an active potion effect from a nearby beacon.
@@ -1206,7 +1231,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    SPELL_MOB_AMBIENT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB_AMBIENT" : version > 20.4 ? "NONE" : "ambient_entity_effect"), COLORABLE),
+    SPELL_MOB_AMBIENT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB_AMBIENT" : (version < 20.5 ? "ambient_entity_effect" : "entity_effect")), COLORABLE, REGULAR_COLOR),
     /**
      * In vanilla, this particle is displayed randomly by witches.
      * <p>
@@ -1285,6 +1310,17 @@ public enum ParticleEffect {
      * </ul>
      */
     SWEEP_ATTACK(version -> version < 9 ? "NONE" : (version < 13 ? "SWEEP_ATTACK" : "sweep_attack"), RESIZEABLE),
+    /**
+     * In vanilla, this particle is displayed falling from trees.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Appearance: A colored leaf.</li>
+     * <li>Speed value: Represents the lightness of the color.</li>
+     * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
+     * </ul>
+     */
+    TINTED_LEAVES(version -> version < 21.5 ? "NONE" : "tinted_leaves", COLORABLE, REGULAR_COLOR),
     /**
      * In vanilla, this particle is displayed when a totem of
      * undying is used.
@@ -1613,7 +1649,8 @@ public enum ParticleEffect {
             return this == DUST_COLOR_TRANSITION;
         if (color instanceof DustData)
             return hasProperty(DUST);
-        return hasProperty(COLORABLE) && (this.equals(ParticleEffect.NOTE) ? color instanceof NoteColor : color instanceof RegularColor);
+
+        return hasProperty(COLORABLE) && (equals(NOTE) ? color instanceof NoteColor : color instanceof RegularColor);
     }
 
     /**

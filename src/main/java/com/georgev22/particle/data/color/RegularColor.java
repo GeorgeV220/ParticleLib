@@ -34,7 +34,8 @@ import com.georgev22.particle.utils.ReflectionUtils;
 import java.awt.*;
 
 /**
- * An implementation of the {@link ParticleColor} class that supports normal RGB values.
+ * An implementation of the {@link ParticleColor} class that supports normal RGB values,
+ * with optional ARGB for {@link PropertyType#REGULAR_COLOR} particles (since 1.20.5).
  * <p>
  * If you want to define a custom size for {@link ParticleEffect#REDSTONE} or the second
  * color for {@link ParticleEffect#DUST_COLOR_TRANSITION}, use {@link DustData} and
@@ -46,6 +47,7 @@ import java.awt.*;
  * @since 10.06.2019
  */
 public class RegularColor extends ParticleColor {
+    private float alpha = 1f;
 
     /**
      * Initializes a new {@link ParticleData} object.
@@ -60,12 +62,39 @@ public class RegularColor extends ParticleColor {
     /**
      * Initializes a new {@link ParticleData} object.
      *
+     * @param color the {@link Color} the
+     *              particle should have.
+     * @param alpha the alpha/brightness value of the color.
+     *              A value of 1f means full brightness. (Introduced in 1.20.5)
+     */
+    public RegularColor(Color color, float alpha) {
+        super(color.getRed(), color.getGreen(), color.getBlue());
+        this.alpha = alpha;
+    }
+
+    /**
+     * Initializes a new {@link ParticleData} object.
+     *
      * @param red   the red value of the color.
      * @param green the green value of the color.
      * @param blue  the blue value of the color.
      */
     public RegularColor(int red, int green, int blue) {
         super(MathUtils.getMaxOrMin(red, 255, 0), MathUtils.getMaxOrMin(green, 255, 0), MathUtils.getMaxOrMin(blue, 255, 0));
+    }
+
+    /**
+     * Initializes a new {@link ParticleData} object.
+     *
+     * @param red   the red value of the color.
+     * @param green the green value of the color.
+     * @param blue  the blue value of the color.
+     * @param alpha the alpha/brightness value of the color.
+     *              A value of 1f means full brightness. (Introduced in 1.20.5)
+     */
+    public RegularColor(int red, int green, int blue, float alpha) {
+        super(MathUtils.getMaxOrMin(red, 255, 0), MathUtils.getMaxOrMin(green, 255, 0), MathUtils.getMaxOrMin(blue, 255, 0));
+        this.alpha = alpha;
     }
 
     /**
@@ -136,6 +165,27 @@ public class RegularColor extends ParticleColor {
     }
 
     /**
+     * Gets the alpha/brightness value of the color. A value of 1f means full brightness.
+     *
+     * @return the alpha value.
+     */
+    public float getAlpha() {
+        return (alpha == 0f ? 1f : Math.max(0f, Math.min(1f, alpha))) * 255f;
+    }
+
+    /**
+     * Converts the current color into an ARGB integer ready for ColorParticleOption.
+     *
+     * @return the ARGB integer.
+     */
+    public int toARGB() {
+        int ri = Math.round(Math.max(0f, Math.min(1f, getRed())) * 255f);
+        int gi = Math.round(Math.max(0f, Math.min(1f, getGreen())) * 255f);
+        int bi = Math.round(Math.max(0f, Math.min(1f, getBlue())) * 255f);
+        return (((int) getAlpha() & 0xFF) << 24) | ((ri & 0xFF) << 16) | ((gi & 0xFF) << 8) | (bi & 0xFF);
+    }
+
+    /**
      * Converts the current {@link ParticleData} instance into nms data. If the current
      * minecraft version was released before 1.13 an int array should be returned. If the
      * version was released after 1.12 a nms "ParticleParam" has to be returned.
@@ -146,15 +196,28 @@ public class RegularColor extends ParticleColor {
      */
     @Override
     public Object toNMSData() {
-        if (ReflectionUtils.MINECRAFT_VERSION < 13 || (getEffect() != ParticleEffect.REDSTONE && getEffect() != ParticleEffect.DUST_COLOR_TRANSITION))
+        if (ReflectionUtils.MINECRAFT_VERSION < 13) {
             return new int[0];
+        }
+
         try {
+            // Handle non-Redstone / non-DustColorTransition particles
+            if (getEffect() != ParticleEffect.REDSTONE && getEffect() != ParticleEffect.DUST_COLOR_TRANSITION) {
+                if (getEffect().hasProperty(PropertyType.REGULAR_COLOR)) {
+                    // Since 1.20.5 we can use ARGB for regular color particles, encoded in ColorParticleOption
+                    return ParticleConstants.COLOR_PARTICLE_OPTION_CREATE_METHOD.invoke(null, getEffect().getNMSObject(), toARGB());
+                }
+
+                return new int[0];
+            }
+
+            // Redstone and DustColorTransition particles need special handling
             if (getEffect() == ParticleEffect.REDSTONE)
                 return ReflectionUtils.MINECRAFT_VERSION < 17
                         ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(getRed(), getGreen(), getBlue(), 1f)
                         : (ReflectionUtils.MINECRAFT_VERSION < 21.3
-                            ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue()), 1f)
-                            : ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(new Color(getRed(), getGreen(), getBlue()).getRGB(), 1f));
+                        ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue()), 1f)
+                        : ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(new Color(getRed(), getGreen(), getBlue()).getRGB(), 1f));
             if (ReflectionUtils.MINECRAFT_VERSION < 17)
                 return null;
             if (ReflectionUtils.MINECRAFT_VERSION < 21.3) {

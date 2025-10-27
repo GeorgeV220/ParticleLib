@@ -450,6 +450,10 @@
       {
         "from": 21.3,
         "value": "f"
+      },
+      {
+        "from": 21.6,
+        "value": "g"
       }
     ]
   },
@@ -549,6 +553,10 @@
       {
         "from": 21,
         "value": "i"
+      },
+      {
+        "from": 21.9,
+        "value": "j"
       }
     ]
   },
@@ -574,6 +582,28 @@
     "mappings": [
       {
         "from": 21,
+        "value": "a"
+      }
+    ]
+  },
+  {
+    "name": "ColorParticleOption",
+    "min": 20.5,
+    "max": 99,
+    "mappings": [
+      {
+        "from": 20.5,
+        "value": "core.particles.ColorParticleOption"
+      }
+    ]
+  },
+  {
+    "name": "ColorParticleOption.create",
+    "min": 20.5,
+    "max": 99,
+    "mappings": [
+      {
+        "from": 20.5,
         "value": "a"
       }
     ]

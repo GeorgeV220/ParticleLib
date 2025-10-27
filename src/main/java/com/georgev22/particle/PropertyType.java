@@ -40,6 +40,8 @@ import com.georgev22.particle.data.color.RegularColor;
  * <li>{@link #DIRECTIONAL}</li>
  * <li>{@link #COLORABLE}</li>
  * <li>{@link #RESIZEABLE}</li>
+ * <li>{@link #REGULAR_COLOR}</li>
+ * <li>{@link #DUST}</li>
  * </ul>
  *
  * @author ByteZ
@@ -87,6 +89,18 @@ public enum PropertyType {
      * Specifies that the size of the given particle can be changed in the offsetX parameter.
      */
     RESIZEABLE,
+    /**
+     * A regular color accepts ARGB values between 0-255. Please note that this
+     * {@link PropertyType} has been introduced to support the new colored particle classification
+     * in 1.20.5 called ColorParticleOption.
+     *
+     * @see RegularColor
+     * @see ParticleConstants#COLOR_PARTICLE_OPTION_CLASS
+     * @see ParticleEffect#SPELL_MOB
+     * @see ParticleEffect#SPELL_MOB_AMBIENT
+     * @see ParticleEffect#TINTED_LEAVES
+     */
+    REGULAR_COLOR,
     /**
      * A dust particle accepts a custom color and a custom size (between 0-4). Please note that
      * this {@link PropertyType} is not supported on pre 1.13 servers.

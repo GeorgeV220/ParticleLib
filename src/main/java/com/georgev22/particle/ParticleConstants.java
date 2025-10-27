@@ -177,6 +177,11 @@ public final class ParticleConstants {
      */
     public static final Class TRAIL_PARTICLE_OPTION_CLASS;
 
+    /**
+     * Represents the ColorParticleOption class.
+     */
+    public static final Class COLOR_PARTICLE_OPTION_CLASS;
+
     /* ---------------- Methods ---------------- */
 
     /**
@@ -207,6 +212,11 @@ public final class ParticleConstants {
      * Represents the MinecraftKey#parse(); method.
      */
     public static final Method MINECRAFT_KEY_METHOD;
+
+    /**
+     * Represents the ColorParticleOption#create(); method.
+     */
+    public static final Method COLOR_PARTICLE_OPTION_CREATE_METHOD;
 
     /* ---------------- Fields ---------------- */
 
@@ -282,6 +292,11 @@ public final class ParticleConstants {
      */
     public static final Constructor TRAIL_PARTICLE_OPTION_CONSTRUCTOR;
 
+    /**
+     * Represents the ColorParticleOption constructor.
+     */
+    public static final Constructor COLOR_PARTICLE_OPTION_CONSTRUCTOR;
+
 
     /* ---------------- Object constants ---------------- */
 
@@ -333,6 +348,7 @@ public final class ParticleConstants {
         PARTICLE_PARAM_SHRIEK_CLASS = getMappedClass("ParticleParamShriek");
         PARTICLE_PARAM_SCULK_CHARGE_CLASS = getMappedClass("ParticleParamSculkCharge");
         TRAIL_PARTICLE_OPTION_CLASS = getMappedClass("TrailParticleOption");
+        COLOR_PARTICLE_OPTION_CLASS = getMappedClass("ColorParticleOption");
 
         // Methods
         REGISTRY_GET_METHOD = getMappedMethod(REGISTRY_CLASS, "Registry.get", MINECRAFT_KEY_CLASS);
@@ -342,6 +358,10 @@ public final class ParticleConstants {
         BLOCK_GET_BLOCK_DATA_METHOD = getMappedMethod(BLOCK_CLASS, "Block.getBlockData");
         CRAFT_ITEM_STACK_AS_NMS_COPY_METHOD = getMethodOrNull(CRAFT_ITEM_STACK_CLASS, "asNMSCopy", ItemStack.class);
         MINECRAFT_KEY_METHOD = getMappedMethod(MINECRAFT_KEY_CLASS, "MinecraftKey.parse", String.class);
+        COLOR_PARTICLE_OPTION_CREATE_METHOD = version < 20.5 ? null : getMappedMethod(COLOR_PARTICLE_OPTION_CLASS, "ColorParticleOption.create", PARTICLE_CLASS, int.class);
+        if (COLOR_PARTICLE_OPTION_CREATE_METHOD != null) {
+            COLOR_PARTICLE_OPTION_CREATE_METHOD.setAccessible(true); // Make accessible in case it's not public
+        }
 
         // Fields
         ENTITY_PLAYER_PLAYER_CONNECTION_FIELD = getMappedField(ENTITY_PLAYER_CLASS, "EntityPlayer.playerConnection", false);
@@ -400,6 +420,10 @@ public final class ParticleConstants {
                 : (version < 21.4
                     ? getConstructorOrNull(TRAIL_PARTICLE_OPTION_CLASS, VEC_3D_CLASS, int.class)
                     : getConstructorOrNull(TRAIL_PARTICLE_OPTION_CLASS, VEC_3D_CLASS, int.class, int.class));
+
+        COLOR_PARTICLE_OPTION_CONSTRUCTOR = version < 20.5
+                ? null
+                : getConstructorOrNull(COLOR_PARTICLE_OPTION_CLASS, PARTICLE_CLASS, int.class);
 
         // Constants
         PARTICLE_TYPE_REGISTRY = readField(
