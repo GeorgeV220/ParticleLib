@@ -49,7 +49,7 @@ The latest version <img src="https://img.shields.io/github/v/release/GeorgeV220/
     <dependency>
         <groupId>com.georgev22</groupId>
         <artifactId>particle</artifactId>
-        <version>1.3.2</version>
+        <version>1.4.0</version>
     </dependency>
 </dependencies>
 ```
@@ -58,7 +58,7 @@ The latest version <img src="https://img.shields.io/github/v/release/GeorgeV220/
 
 ```groovy
 dependencies {
-    implementation 'com.georgev22:particle:1.3.2'
+    implementation 'com.georgev22:particle:1.4.0'
 }
 ```
 
