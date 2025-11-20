@@ -1,3 +1,10 @@
+# [1.5.0-alpha.2](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0-alpha.1...v1.5.0-alpha.2) (2025-11-20)
+
+
+### Features
+
+* replace double version checks with MinecraftVersion enum ([32873b3](https://github.com/GeorgeV220/ParticleLib/commit/32873b334792564da560cf4ffa366ab2f25eb2ed))
+
 # [1.5.0-alpha.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.4.0...v1.5.0-alpha.1) (2025-11-20)
 
 
