@@ -57,16 +57,17 @@ public class ParticleMappings {
         JsonArray mappingsArray = object.get("mappings").getAsJsonArray();
 
         String bestMatch = null;
-        double lastFrom = -1;
+        int lastFrom = -1;
 
         for (int i = 0; i < mappingsArray.size(); ++i) {
             JsonObject entry = mappingsArray.get(i).getAsJsonObject();
 
             double from = entry.get("from").getAsDouble();
+            int fromInt = toPackedVersion(from);
 
-            if (toLegacyPercent() >= from && from > lastFrom) {
+            if (getCurrentPackedVersion() >= fromInt && fromInt > lastFrom) {
                 bestMatch = entry.get("value").getAsString();
-                lastFrom = from;
+                lastFrom = fromInt;
             }
         }
 
@@ -79,23 +80,39 @@ public class ParticleMappings {
      * Check if version fits min/max range from json.
      */
     private static boolean isInRange(double min, double max) {
-        double v = toLegacyPercent();
-        return v >= min && v <= max;
+        int current = getCurrentPackedVersion();
+        int minInt = toPackedVersion(min);
+        int maxInt = toPackedVersion(max);
+        return current >= minInt && current <= maxInt;
     }
 
     /**
-     * Converts enum version into legacy style double like:
-     * 1.21.10 -> 21.10
-     * 1.21.9  -> 21.9
-     *
-     * @return Legacy style double
+     * Packs the current version into a safe int.
+     * Example:
+     * 1.21.9  -> (21 << 8) | 9
+     * 1.21.10 -> (21 << 8) | 10
      */
-    private static double toLegacyPercent() {
+    private static int getCurrentPackedVersion() {
         String base = MINECRAFT_VERSION.getSubVersionRange().getVersion();
         String[] split = base.split("\\.");
+
         int minor = Integer.parseInt(split[1]);
         int patch = MINECRAFT_VERSION.getSubVersionRange().getEnd();
-        return Double.parseDouble(minor + "." + patch);
+
+        return (minor << 8) | patch;
+    }
+
+    /**
+     * Converts JSON double version (21.9, 21.10, etc.) to packed int.
+     */
+    private static int toPackedVersion(double v) {
+        String s = String.valueOf(v);
+        String[] parts = s.split("\\.");
+
+        int minor = Integer.parseInt(parts[0]);
+        int patch = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+
+        return (minor << 8) | patch;
     }
 
     /**
