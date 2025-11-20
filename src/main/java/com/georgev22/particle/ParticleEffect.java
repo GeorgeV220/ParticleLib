@@ -32,6 +32,7 @@ import com.georgev22.particle.utils.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.awt.*;
@@ -1554,7 +1555,21 @@ public enum ParticleEffect {
         NMS_EFFECTS = Collections.unmodifiableMap(
                 VALUES.stream()
                         .filter(effect -> !"NONE".equals(effect.getFieldName()))
-                        .collect(Collectors.toMap(Function.identity(), ParticleEffect::getNMSObject))
+                        .map(effect -> new AbstractMap.SimpleEntry<>(effect, effect.getNMSObject()))
+                        .filter(entry -> {
+                            Object nmsClass = entry.getValue();
+                            ParticleEffect effect = entry.getKey();
+                            JavaPlugin plugin = JavaPlugin.getProvidingPlugin(ParticleEffect.class);
+
+                            plugin.getLogger().info(
+                                    "[ParticleEffect] " + effect.name() +
+                                            " => " + nmsClass +
+                                            " (supported=" + (nmsClass != null) + ")"
+                            );
+
+                            return nmsClass != null;
+                        })
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
     }
 
