@@ -36,6 +36,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.List;
@@ -1546,31 +1548,34 @@ public enum ParticleEffect {
     public static final List<ParticleEffect> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     /**
      * A {@link HashMap} to store the nms instances of all currently supported
-     * {@link ParticleEffect ParticleEffects}.
+     * {@link ParticleEffect ParticleEffects}. This map is unmodifiable.
      */
     public static final Map<ParticleEffect, Object> NMS_EFFECTS;
+    /**
+     * A {@link List} to store all currently unsupported
+     * {@link ParticleEffect ParticleEffects}. This list is unmodifiable.
+     */
+    public static final List<ParticleEffect> UNSUPPORTED_EFFECTS;
 
     static {
-        //noinspection ConstantConditions
-        NMS_EFFECTS = Collections.unmodifiableMap(
-                VALUES.stream()
-                        .filter(effect -> !"NONE".equals(effect.getFieldName()))
-                        .map(effect -> new AbstractMap.SimpleEntry<>(effect, effect.getNMSObject()))
-                        .filter(entry -> {
-                            Object nmsClass = entry.getValue();
-                            ParticleEffect effect = entry.getKey();
-                            JavaPlugin plugin = JavaPlugin.getProvidingPlugin(ParticleEffect.class);
+        Map<ParticleEffect, Object> effects = new HashMap<>();
+        List<ParticleEffect> unsupported = new ArrayList<>();
 
-                            plugin.getLogger().info(
-                                    "[ParticleEffect] " + effect.name() +
-                                            " => " + nmsClass +
-                                            " (supported=" + (nmsClass != null) + ")"
-                            );
+        for (ParticleEffect effect : VALUES) {
+            if ("NONE".equals(effect.getFieldName())) {
+                continue;
+            }
 
-                            return nmsClass != null;
-                        })
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-        );
+            Object nms = effect.getNMSObject();
+            if (nms != null) {
+                effects.put(effect, nms);
+            } else {
+                unsupported.add(effect);
+            }
+        }
+
+        NMS_EFFECTS = Collections.unmodifiableMap(effects);
+        UNSUPPORTED_EFFECTS = Collections.unmodifiableList(unsupported);
     }
 
     /**
@@ -1600,8 +1605,21 @@ public enum ParticleEffect {
      *
      * @return all available effects.
      */
+    @NotNull
+    @Contract(pure = true)
     public static Set<ParticleEffect> getAvailableEffects() {
         return NMS_EFFECTS.keySet();
+    }
+
+    /**
+     * Returns a set of all currently unsupported {@link ParticleEffect ParticleEffects}.
+     *
+     * @return a set of unsupported {@link ParticleEffect ParticleEffects}.
+     */
+    @NotNull
+    @Contract(value = " -> new", pure = true)
+    public static Set<ParticleEffect> getUnsupportedEffects() {
+        return new HashSet<>(UNSUPPORTED_EFFECTS);
     }
 
     /**
