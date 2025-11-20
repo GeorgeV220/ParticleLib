@@ -53,7 +53,7 @@ public final class ReflectionUtils {
     /**
      * The current Minecraft version as an int.
      */
-    public static final double MINECRAFT_VERSION; // TODO switch to version object
+    public static final MinecraftVersion MINECRAFT_VERSION;
     /**
      * A cache for playerconnections.
      */
@@ -97,11 +97,9 @@ public final class ReflectionUtils {
     static {
         String serverPath = Bukkit.getServer().getClass().getPackage().getName();
         String version = serverPath.substring(serverPath.lastIndexOf(".") + 1);
-        String bukkitVersion = Bukkit.getBukkitVersion();
-        int dashIndex = bukkitVersion.indexOf("-");
-        MINECRAFT_VERSION = Double.parseDouble(bukkitVersion.substring(2, dashIndex > -1 ? bukkitVersion.indexOf("-") : bukkitVersion.length()));
-        NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION < 17 ? ".server." + version : "");
-        CRAFT_BUKKIT_PACKAGE_PATH = MINECRAFT_VERSION > 20.4 ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + version;
+        MINECRAFT_VERSION = MinecraftVersion.getCurrentVersion();
+        NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1) ? ".server." + version : "");
+        CRAFT_BUKKIT_PACKAGE_PATH = MINECRAFT_VERSION.isAbove(MinecraftVersion.V1_20_R3) ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + version;
         plugin = readDeclaredField(PLUGIN_CLASS_LOADER_PLUGIN_FIELD, ReflectionUtils.class.getClassLoader());
         PLAYER_CONNECTION_CACHE = new PlayerConnectionCache();
         try {
@@ -426,7 +424,7 @@ public final class ReflectionUtils {
             return null;
         try {
             // Minecraft removed the MinecraftKey constructor in 1.21 in favor of a static method.
-            if (MINECRAFT_VERSION > 20.6) {
+            if (MINECRAFT_VERSION.isAboveOrEqual(MinecraftVersion.V1_21_R1)) {
                 return ParticleConstants.MINECRAFT_KEY_METHOD.invoke(null, key);
             }
             return ParticleConstants.MINECRAFT_KEY_CONSTRUCTOR.newInstance(key);

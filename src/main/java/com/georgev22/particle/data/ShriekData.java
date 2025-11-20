@@ -26,6 +26,7 @@ package com.georgev22.particle.data;
 
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.ParticleEffect;
+import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 
 /**
@@ -70,7 +71,7 @@ public final class ShriekData extends ParticleData {
      */
     @Override
     public Object toNMSData() {
-        if (ReflectionUtils.MINECRAFT_VERSION < 19 || getEffect() != ParticleEffect.SHRIEK)
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_19_R1) || getEffect() != ParticleEffect.SHRIEK)
             return null;
         try {
             return ParticleConstants.PARTICLE_PARAM_SHRIEK_CONSTRUCTOR.newInstance(getDelay());

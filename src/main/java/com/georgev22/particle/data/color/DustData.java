@@ -27,6 +27,7 @@ package com.georgev22.particle.data.color;
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.ParticleEffect;
 import com.georgev22.particle.PropertyType;
+import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 
 import java.awt.*;
@@ -107,16 +108,16 @@ public class DustData extends RegularColor {
     @Override
     public Object toNMSData() {
         try {
-            if (ReflectionUtils.MINECRAFT_VERSION < 13 || getEffect() == null || !getEffect().hasProperty(PropertyType.DUST))
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1) || getEffect() == null || !getEffect().hasProperty(PropertyType.DUST))
                 return new int[0];
-            else if (ReflectionUtils.MINECRAFT_VERSION < 17 && getEffect() == ParticleEffect.REDSTONE)
+            else if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1) && getEffect() == ParticleEffect.REDSTONE)
                 return ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(getRed(), getGreen(), getBlue(), getSize());
-            else if (ReflectionUtils.MINECRAFT_VERSION >= 17 && ReflectionUtils.MINECRAFT_VERSION < 21.3) {
+            else if (ReflectionUtils.MINECRAFT_VERSION.isAboveOrEqual(MinecraftVersion.V1_17_R1) && ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R2)) {
                 Object colorVector = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
                 return getEffect() == ParticleEffect.REDSTONE
                         ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(colorVector, getSize())
                         : ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(colorVector, colorVector, getSize());
-            } else if (ReflectionUtils.MINECRAFT_VERSION >= 21.3) {
+            } else if (ReflectionUtils.MINECRAFT_VERSION.isAboveOrEqual(MinecraftVersion.V1_21_R2)) {
                 Color color = new Color(getRed(), getGreen(), getBlue());
                 return getEffect() == ParticleEffect.REDSTONE
                         ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(color.getRGB(), getSize())

@@ -29,6 +29,7 @@ import com.georgev22.particle.ParticleEffect;
 import com.georgev22.particle.PropertyType;
 import com.georgev22.particle.data.ParticleData;
 import com.georgev22.particle.utils.MathUtils;
+import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 
 import java.awt.*;
@@ -196,14 +197,14 @@ public class RegularColor extends ParticleColor {
      */
     @Override
     public Object toNMSData() {
-        if (ReflectionUtils.MINECRAFT_VERSION < 13) {
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1)) {
             return new int[0];
         }
 
         try {
             // Handle non-Redstone / non-DustColorTransition particles
             if (getEffect() != ParticleEffect.REDSTONE && getEffect() != ParticleEffect.DUST_COLOR_TRANSITION) {
-                if (getEffect().hasProperty(PropertyType.REGULAR_COLOR) && ReflectionUtils.MINECRAFT_VERSION >= 20.5) {
+                if (getEffect().hasProperty(PropertyType.REGULAR_COLOR) && ReflectionUtils.MINECRAFT_VERSION.isAboveOrEqual(MinecraftVersion.V1_20_R4)) {
                     // Since 1.20.5 we can use ARGB for regular color particles, encoded in ColorParticleOption
                     return ParticleConstants.COLOR_PARTICLE_OPTION_CREATE_METHOD.invoke(null, getEffect().getNMSObject(), toARGB());
                 }
@@ -213,14 +214,14 @@ public class RegularColor extends ParticleColor {
 
             // Redstone and DustColorTransition particles need special handling
             if (getEffect() == ParticleEffect.REDSTONE)
-                return ReflectionUtils.MINECRAFT_VERSION < 17
+                return ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1)
                         ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(getRed(), getGreen(), getBlue(), 1f)
-                        : (ReflectionUtils.MINECRAFT_VERSION < 21.3
+                        : (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R2)
                         ? ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue()), 1f)
                         : ParticleConstants.PARTICLE_PARAM_REDSTONE_CONSTRUCTOR.newInstance(new Color(getRed(), getGreen(), getBlue()).getRGB(), 1f));
-            if (ReflectionUtils.MINECRAFT_VERSION < 17)
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1))
                 return null;
-            if (ReflectionUtils.MINECRAFT_VERSION < 21.3) {
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R2)) {
                 Object colorVector = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
                 return ParticleConstants.PARTICLE_PARAM_DUST_COLOR_TRANSITION_CONSTRUCTOR.newInstance(colorVector, colorVector, 1f);
             }

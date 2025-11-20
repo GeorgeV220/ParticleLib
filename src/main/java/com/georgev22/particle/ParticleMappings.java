@@ -1,33 +1,10 @@
-/*
- * MIT License
- *
- * Copyright (c) 2022 ByteZ1337
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 package com.georgev22.particle;
 
-import com.georgev22.particle.utils.ReflectionUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
@@ -37,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.georgev22.particle.utils.ReflectionUtils.*;
+import static com.georgev22.particle.utils.ReflectionUtils.MINECRAFT_VERSION;
 
 /**
  * Maps classes, methods and fields to their respective names for different versions of Minecraft.
@@ -44,51 +22,80 @@ import static com.georgev22.particle.utils.ReflectionUtils.*;
 public class ParticleMappings {
 
     /**
-     * {@link Map} containing all mappings needed by ParticleLib.
+     * Map containing all mappings needed by ParticleLib.
      */
     private static final Map<String, String> mappings = new HashMap<>();
 
     static {
-        double version = ReflectionUtils.MINECRAFT_VERSION;
-        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(ReflectionUtils.getResourceStreamSafe("mappings.json")))) {
+
+        try (InputStreamReader reader =
+                     new InputStreamReader(Objects.requireNonNull(getResourceStreamSafe("mappings.json")))) {
             //noinspection deprecation - Outdated gson is used in pre 1.18 versions
-            JsonArray array = version < 18
-                    ? new JsonParser().parse(reader).getAsJsonArray()
-                    : JsonParser.parseReader(reader).getAsJsonArray();
+            JsonArray array = new JsonParser().parse(reader).getAsJsonArray();
 
             for (int i = 0; i < array.size(); ++i) {
                 JsonObject object = array.get(i).getAsJsonObject();
-                processMapping(object, version);
+                processMapping(object);
             }
+
         } catch (Exception ex) {
             throw new RuntimeException("Could not load mappings", ex);
         }
     }
 
-    // private static void processMapping(JsonObject object, double version) {
-
     /**
-     * Processes a mapping {@link JsonObject} and adds it to {@link #mappings} if
-     * it exists in the current version of Minecraft.
-     *
-     * @param object  the mapping {@link JsonObject}
-     * @param version the current version of Minecraft
+     * Processes a mapping JsonObject and adds it if it matches current MC version.
      */
-    private static void processMapping(JsonObject object, double version) {
-        if (version < object.get("min").getAsDouble() || version > object.get("max").getAsDouble())
+    private static void processMapping(@NotNull JsonObject object) {
+        if (!isInRange(
+                object.get("min").getAsDouble(),
+                object.get("max").getAsDouble())) {
             return;
+        }
+
         String name = object.get("name").getAsString();
         JsonArray mappingsArray = object.get("mappings").getAsJsonArray();
+
         String bestMatch = null;
-        double lastVersion = 0;
+        double lastFrom = -1;
+
         for (int i = 0; i < mappingsArray.size(); ++i) {
-            JsonObject mapping = mappingsArray.get(i).getAsJsonObject();
-            double from = mapping.get("from").getAsDouble();
-            if (version >= from && from > lastVersion)
-                bestMatch = mapping.get("value").getAsString();
+            JsonObject entry = mappingsArray.get(i).getAsJsonObject();
+
+            double from = entry.get("from").getAsDouble();
+
+            if (toLegacyPercent() >= from && from > lastFrom) {
+                bestMatch = entry.get("value").getAsString();
+                lastFrom = from;
+            }
         }
-        if (bestMatch != null)
+
+        if (bestMatch != null) {
             mappings.put(name, bestMatch);
+        }
+    }
+
+    /**
+     * Check if version fits min/max range from json.
+     */
+    private static boolean isInRange(double min, double max) {
+        double v = toLegacyPercent();
+        return v >= min && v <= max;
+    }
+
+    /**
+     * Converts enum version into legacy style double like:
+     * 1.21.10 -> 21.10
+     * 1.21.9  -> 21.9
+     *
+     * @return Legacy style double
+     */
+    private static double toLegacyPercent() {
+        String base = MINECRAFT_VERSION.getSubVersionRange().getVersion();
+        String[] split = base.split("\\.");
+        int minor = Integer.parseInt(split[1]);
+        int patch = MINECRAFT_VERSION.getSubVersionRange().getEnd();
+        return Double.parseDouble(minor + "." + patch);
     }
 
     /**
@@ -97,10 +104,11 @@ public class ParticleMappings {
      * @param name the name of the class
      * @return the mapped {@link Class}
      */
+    @Nullable
     public static Class<?> getMappedClass(String name) {
-        if (!mappings.containsKey(name))
-            return null;
-        return getNMSClass(mappings.get(name));
+        String mapped = mappings.get(name);
+        if (mapped == null) return null;
+        return getNMSClass(mapped);
     }
 
     /**
@@ -111,10 +119,11 @@ public class ParticleMappings {
      * @param parameterTypes the parameter types of the method
      * @return the mapped {@link Method}
      */
+    @Nullable
     public static Method getMappedMethod(Class<?> targetClass, String name, Class<?>... parameterTypes) {
-        if (!mappings.containsKey(name))
-            return null;
-        return getMethodOrNull(targetClass, mappings.get(name), parameterTypes);
+        String mapped = mappings.get(name);
+        if (mapped == null) return null;
+        return getMethodOrNull(targetClass, mapped, parameterTypes);
     }
 
     /**
@@ -125,10 +134,10 @@ public class ParticleMappings {
      * @param declared    whether to get the declared field or not
      * @return the mapped {@link Field}
      */
-    public static Field getMappedField(Class targetClass, String name, boolean declared) {
-        if (!mappings.containsKey(name))
-            return null;
-        return getFieldOrNull(targetClass, mappings.get(name), declared);
+    @Nullable
+    public static Field getMappedField(Class<?> targetClass, String name, boolean declared) {
+        String mapped = mappings.get(name);
+        if (mapped == null) return null;
+        return getFieldOrNull(targetClass, mapped, declared);
     }
-
 }
