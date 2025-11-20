@@ -1,3 +1,10 @@
+# [1.5.0-alpha.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.4.0...v1.5.0-alpha.1) (2025-11-20)
+
+
+### Features
+
+* filter out null NMS objects in ParticleEffect initialization ([f9139c9](https://github.com/GeorgeV220/ParticleLib/commit/f9139c976ff0d7da3a7be1c09c8e185baee8a4d5))
+
 # [1.4.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.3.2...v1.4.0) (2025-10-27)
 
 
