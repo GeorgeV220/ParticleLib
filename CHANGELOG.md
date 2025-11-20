@@ -1,3 +1,10 @@
+# [1.5.0-alpha.4](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0-alpha.3...v1.5.0-alpha.4) (2025-11-20)
+
+
+### Features
+
+* improve particle effect initialization and add unsupported effects tracking ([4892ed8](https://github.com/GeorgeV220/ParticleLib/commit/4892ed80d3e2b044d345a5559f3f1ab6feccce0f))
+
 # [1.5.0-alpha.3](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0-alpha.2...v1.5.0-alpha.3) (2025-11-20)
 
 
