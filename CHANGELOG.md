@@ -1,3 +1,10 @@
+# [1.5.0-alpha.3](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0-alpha.2...v1.5.0-alpha.3) (2025-11-20)
+
+
+### Bug Fixes
+
+* improve version comparison logic for particle mappings ([3526f37](https://github.com/GeorgeV220/ParticleLib/commit/3526f37a5c1263fc5422ddae5847ee54cd9165b7))
+
 # [1.5.0-alpha.2](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0-alpha.1...v1.5.0-alpha.2) (2025-11-20)
 
 
