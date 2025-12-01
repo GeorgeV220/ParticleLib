@@ -27,6 +27,7 @@ package com.georgev22.particle.data.color;
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.ParticleEffect;
 import com.georgev22.particle.PropertyType;
+import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 
 import java.awt.*;
@@ -132,9 +133,9 @@ public final class DustColorTransitionData extends DustData {
      */
     @Override
     public Object toNMSData() {
-        if (ReflectionUtils.MINECRAFT_VERSION < 17 || getEffect() != ParticleEffect.DUST_COLOR_TRANSITION)
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1) || getEffect() != ParticleEffect.DUST_COLOR_TRANSITION)
             return null;
-        if (ReflectionUtils.MINECRAFT_VERSION < 21.3) {
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R2)) {
             Object fadeStart = ReflectionUtils.createVector3fa(getRed(), getGreen(), getBlue());
             Object fadeEnd = ReflectionUtils.createVector3fa(getFadeRed(), getFadeGreen(), getFadeBlue());
             try {

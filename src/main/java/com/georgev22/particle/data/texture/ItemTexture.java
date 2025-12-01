@@ -27,6 +27,7 @@ package com.georgev22.particle.data.texture;
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.PropertyType;
 import com.georgev22.particle.data.ParticleData;
+import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 import org.bukkit.inventory.ItemStack;
 
@@ -83,7 +84,7 @@ public final class ItemTexture extends ParticleTexture {
     public Object toNMSData() {
         if (getMaterial() == null || getData() < 0 || getEffect() == null || !getEffect().hasProperty(PropertyType.REQUIRES_ITEM))
             return null;
-        if (ReflectionUtils.MINECRAFT_VERSION < 13)
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1))
             return super.toNMSData();
         else {
             try {

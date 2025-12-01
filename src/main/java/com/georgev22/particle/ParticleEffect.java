@@ -28,17 +28,20 @@ import com.georgev22.particle.data.*;
 import com.georgev22.particle.data.color.*;
 import com.georgev22.particle.data.texture.BlockTexture;
 import com.georgev22.particle.data.texture.ItemTexture;
+import com.georgev22.particle.utils.MinecraftVersion;
+import com.georgev22.particle.utils.MinecraftVersionFunction;
 import com.georgev22.particle.utils.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.function.DoubleFunction;
-import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -191,7 +194,7 @@ public enum ParticleEffect {
      * <li>Extra: This Particle gets a random velocity while falling down.</li>
      * </ul>
      */
-    ASH(version -> version < 16 ? "NONE" : "ash"),
+    ASH(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "ash"),
     /**
      * <b>REPLACED BY {@link #BLOCK_MARKER} SINCE 1.18</b>
      * <p>
@@ -204,7 +207,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    BARRIER(version -> version < 8 || version > 17 ? "NONE" : (version < 13 ? "BARRIER" : "barrier")),
+    BARRIER(version -> version.isBelow(MinecraftVersion.V1_8_R1) || version.isAbove(MinecraftVersion.V1_17_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "BARRIER" : "barrier")),
     /**
      * In vanilla, this particle is displayed when a player breaks
      * a block or sprints. It's also displayed by iron golems while
@@ -217,7 +220,7 @@ public enum ParticleEffect {
      * <li>Extra: This particle needs a block texture in order to work.</li>
      * </ul>
      */
-    BLOCK_CRACK(version -> version < 8 ? "NONE" : (version < 13 ? "BLOCK_CRACK" : "block"), REQUIRES_BLOCK),
+    BLOCK_CRACK(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "BLOCK_CRACK" : "block"), REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is displayed when a player breaks
      * a block or sprints. It's also displayed by iron golems while
@@ -230,7 +233,7 @@ public enum ParticleEffect {
      * <li>Extra: This particle needs a block texture in order to work.</li>
      * </ul>
      */
-    BLOCK_CRUMBLE(version -> version < 21.3 ? "NONE" : "block_crumble", REQUIRES_BLOCK),
+    BLOCK_CRUMBLE(version -> version.isAbove(MinecraftVersion.V1_21_R2) ? "NONE" : "block_crumble", REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is displayed when an entity hits the ground
      * after falling. It's also displayed when an armorstand is broken.
@@ -243,7 +246,7 @@ public enum ParticleEffect {
      * <li> This particle needs a block texture in order to work.</li></ul></li>
      * </ul>
      */
-    BLOCK_DUST(version -> version < 8 ? "NONE" : (version < 13 ? "BLOCK_DUST" : "falling_dust"), DIRECTIONAL, REQUIRES_BLOCK),
+    BLOCK_DUST(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "BLOCK_DUST" : "falling_dust"), DIRECTIONAL, REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is randomly displayed by magma
      * blocks and soulsand underwater.
@@ -255,7 +258,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    BUBBLE_COLUMN_UP(version -> version < 13 ? "NONE" : "bubble_column_up", DIRECTIONAL),
+    BUBBLE_COLUMN_UP(version -> version.isBelow(MinecraftVersion.V1_13_R1) ? "NONE" : "bubble_column_up", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by barrier blocks when a player
      * holds a barrier item in the main- or off-hand or by the light block.
@@ -268,7 +271,7 @@ public enum ParticleEffect {
      * <li>Extra: This particle needs a block texture in order to work.</li>
      * </ul>
      */
-    BLOCK_MARKER(version -> version < 18 ? "NONE" : "block_marker", REQUIRES_BLOCK),
+    BLOCK_MARKER(version -> version.isBelow(MinecraftVersion.V1_18_R1) ? "NONE" : "block_marker", REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is displayed at the top of
      * bubble columns.
@@ -280,7 +283,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    BUBBLE_POP(version -> version < 13 ? "NONE" : "bubble_pop", DIRECTIONAL),
+    BUBBLE_POP(version -> version.isBelow(MinecraftVersion.V1_13_R1) ? "NONE" : "bubble_pop", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by campfires.
      * <p>
@@ -291,7 +294,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    CAMPFIRE_COSY_SMOKE(version -> version < 14 ? "NONE" : "campfire_cosy_smoke", DIRECTIONAL),
+    CAMPFIRE_COSY_SMOKE(version -> version.isBelow(MinecraftVersion.V1_14_R1) ? "NONE" : "campfire_cosy_smoke", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by campfires with
      * a hay bale placed under them.
@@ -303,7 +306,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    CAMPFIRE_SIGNAL_SMOKE(version -> version < 14 ? "NONE" : "campfire_signal_smoke", DIRECTIONAL),
+    CAMPFIRE_SIGNAL_SMOKE(version -> version.isBelow(MinecraftVersion.V1_14_R1) ? "NONE" : "campfire_signal_smoke", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed falling off cherry leaves
      * in cherry grove biomes.
@@ -314,7 +317,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    CHERRY_LEAVES(version -> version < 19.4 ? "NONE" : (version < 20 ? "falling_cherry_leaves" : "cherry_leaves"), DIRECTIONAL),
+    CHERRY_LEAVES(version -> version.isBelow(MinecraftVersion.V1_19_R3) ? "NONE" : (version.isBelow(MinecraftVersion.V1_20_R1) ? "falling_cherry_leaves" : "cherry_leaves"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when an entity dies.
      * <p>
@@ -325,7 +328,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    CLOUD(version -> version < 8 ? "NONE" : (version < 13 ? "CLOUD" : "cloud"), DIRECTIONAL),
+    CLOUD(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "CLOUD" : "cloud"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a composter
      * is used by a player.
@@ -336,7 +339,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    COMPOSTER(version -> version < 14 ? "NONE" : "composter"),
+    COMPOSTER(version -> version.isBelow(MinecraftVersion.V1_14_R1) ? "NONE" : "composter"),
     /**
      * In vanilla, this particle is randomly displayed by copper torches.
      * <p>
@@ -347,7 +350,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    COPPER_FIRE_FLAME(version -> version < 21.9 ? "NONE" : "copper_fire_flame", DIRECTIONAL),
+    COPPER_FIRE_FLAME(version -> version.isBelow(MinecraftVersion.V1_21_R6) ? "NONE" : "copper_fire_flame", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed in the crimson forest
      * nether biome.
@@ -359,7 +362,7 @@ public enum ParticleEffect {
      * <li>Extra: This Particle gets a random velocity up.</li>
      * </ul>
      */
-    CRIMSON_SPORE(version -> version < 16 ? "NONE" : "crimson_spore"),
+    CRIMSON_SPORE(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "crimson_spore"),
     /**
      * In vanilla, this particle is displayed when a player lands
      * a critical hit on an entity or an  arrow is launched with full power.
@@ -370,7 +373,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    CRIT(version -> version < 8 ? "NONE" : (version < 13 ? "CRIT" : "crit"), DIRECTIONAL),
+    CRIT(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "CRIT" : "crit"), DIRECTIONAL),
     /**
      * In vanilla, this particle  is displayed when a player hits
      * an entity with a sharpness sword.
@@ -381,7 +384,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    CRIT_MAGIC(version -> version < 8 ? "NONE" : (version < 13 ? "CRIT_MAGIC" : "enchanted_hit"), DIRECTIONAL),
+    CRIT_MAGIC(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "CRIT_MAGIC" : "enchanted_hit"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by magma blocks underwater.
      * <p>
@@ -391,7 +394,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    CURRENT_DOWN(version -> version < 13 ? "NONE" : "current_down"),
+    CURRENT_DOWN(version -> version.isBelow(MinecraftVersion.V1_13_R1) ? "NONE" : "current_down"),
     /**
      * In vanilla, this particle is displayed when a Player hits
      * an Entity by melee attack.
@@ -403,7 +406,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    DAMAGE_INDICATOR(version -> version < 9 ? "NONE" : (version < 13 ? "DAMAGE_INDICATOR" : "damage_indicator"), DIRECTIONAL),
+    DAMAGE_INDICATOR(version -> version.isBelow(MinecraftVersion.V1_9_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "DAMAGE_INDICATOR" : "damage_indicator"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed as a trail of
      * dolphins.
@@ -414,7 +417,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    DOLPHIN(version -> version < 13 ? "NONE" : "dolphin"),
+    DOLPHIN(version -> version.isBelow(MinecraftVersion.V1_13_R1) ? "NONE" : "dolphin"),
     /**
      * In vanilla, this particle is displayed by the ender dragons
      * breath and ender fireballs.
@@ -426,7 +429,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    DRAGON_BREATH(version -> version < 9 ? "NONE" : (version < 13 ? "DRAGON_BREATH" : "dragon_breath"), DIRECTIONAL),
+    DRAGON_BREATH(version -> version.isBelow(MinecraftVersion.V1_9_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "DRAGON_BREATH" : "dragon_breath"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed randomly when a
      * lava block is above a block.
@@ -436,7 +439,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    DRIP_LAVA(version -> version < 8 ? "NONE" : (version < 13 ? "DRIP_LAVA" : "dripping_lava")),
+    DRIP_LAVA(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "DRIP_LAVA" : "dripping_lava")),
     /**
      * In vanilla, this particle is displayed randomly when a
      * water block is above a block.
@@ -447,7 +450,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    DRIP_WATER(version -> version < 8 ? "NONE" : (version < 13 ? "DRIP_WATER" : "dripping_water")),
+    DRIP_WATER(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "DRIP_WATER" : "dripping_water")),
     /**
      * In vanilla, this particle is shown dripping from the
      * tip of pointed dripstones.
@@ -458,7 +461,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    DRIPPING_DRIPSTONE_LAVA(version -> version < 17 ? "NONE" : "dripping_dripstone_lava"),
+    DRIPPING_DRIPSTONE_LAVA(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "dripping_dripstone_lava"),
     /**
      * In vanilla, this particle is shown dripping from the
      * tip of pointed dripstones.
@@ -469,7 +472,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    DRIPPING_DRIPSTONE_WATER(version -> version < 17 ? "NONE" : "dripping_dripstone_water"),
+    DRIPPING_DRIPSTONE_WATER(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "dripping_dripstone_water"),
     /**
      * In vanilla, this particle is displayed by beehives filled
      * with honey. As opposed to the {@link #FALLING_HONEY} particles,
@@ -482,7 +485,7 @@ public enum ParticleEffect {
      * <li>Extra: Spawns a {@link #LANDING_HONEY} particle after landing on a block.</li>
      * </ul>
      */
-    DRIPPING_HONEY(version -> version < 15 ? "NONE" : "dripping_honey"),
+    DRIPPING_HONEY(version -> version.isBelow(MinecraftVersion.V1_15_R1) ? "NONE" : "dripping_honey"),
     /**
      * In vanilla, this particle is displayed by crying obsidian.
      * <p>
@@ -493,7 +496,7 @@ public enum ParticleEffect {
      * <li>Extra: Spawns a {@link #LANDING_OBSIDIAN_TEAR} particle after landing on a block.</li>
      * </ul>
      */
-    DRIPPING_OBSIDIAN_TEAR(version -> version < 16 ? "NONE" : "dripping_obsidian_tear"),
+    DRIPPING_OBSIDIAN_TEAR(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "dripping_obsidian_tear"),
     /**
      * In vanilla, this particle is displayed when a sculk sensor is triggered.
      * <p>
@@ -506,7 +509,7 @@ public enum ParticleEffect {
      * More information can be found here: {@link PropertyType#DUST}, {@link DustColorTransitionData}</li>
      * </ul>
      */
-    DUST_COLOR_TRANSITION(version -> version < 17 ? "NONE" : "dust_color_transition", COLORABLE, DUST),
+    DUST_COLOR_TRANSITION(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "dust_color_transition", COLORABLE, DUST),
     /**
      * In vanilla, this particle is displayed when a player hits an
      * entity with a Mace smash attack.
@@ -519,7 +522,7 @@ public enum ParticleEffect {
      * <li> This particle needs a block texture in order to work.</li></ul></li>
      * </ul>
      */
-    DUST_PILLAR(version -> version < 20.5 ? "NONE" : "dust_pillar", DIRECTIONAL, REQUIRES_BLOCK),
+    DUST_PILLAR(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "dust_pillar", DIRECTIONAL, REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is shown when adding items to decorated pots.
      * <p>
@@ -530,7 +533,7 @@ public enum ParticleEffect {
      * <li>Extra: This Particle gets a random velocity up.</li>
      * </ul>
      */
-    DUST_PLUME(version -> version < 20.5 ? "NONE" : "dust_plume", DUST),
+    DUST_PLUME(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "dust_plume", DUST),
     /**
      * In vanilla, this particle appears when a lightning bolt hits
      * copper blocks.
@@ -542,7 +545,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set.</li>
      * </ul>
      */
-    ELECTRIC_SPARK(version -> version < 17 ? "NONE" : "electric_spark", DIRECTIONAL),
+    ELECTRIC_SPARK(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "electric_spark", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by bookshelves near
      * an enchanting table.
@@ -554,7 +557,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    ENCHANTMENT_TABLE(version -> version < 8 ? "NONE" : (version < 13 ? "ENCHANTMENT_TABLE" : "enchant"), DIRECTIONAL),
+    ENCHANTMENT_TABLE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "ENCHANTMENT_TABLE" : "enchant"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by end rods and
      * shulker bullets.
@@ -566,7 +569,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    END_ROD(version -> version < 9 ? "NONE" : (version < 13 ? "END_ROD" : "end_rod"), DIRECTIONAL),
+    END_ROD(version -> version.isBelow(MinecraftVersion.V1_9_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "END_ROD" : "end_rod"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when tnt or creeper
      * explodes.
@@ -577,7 +580,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    EXPLOSION_HUGE(version -> version < 8 ? "NONE" : (version < 13 ? "EXPLOSION_HUGE" : "explosion_emitter")),
+    EXPLOSION_HUGE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "EXPLOSION_HUGE" : "explosion_emitter")),
     /**
      * In vanilla, this particle is displayed when a fireball
      * explodes or a wither skull hits a block/entity.
@@ -588,7 +591,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    EXPLOSION_LARGE(version -> version < 8 ? "NONE" : (version < 13 ? "EXPLOSION_LARGE" : "explosion")),
+    EXPLOSION_LARGE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "EXPLOSION_LARGE" : "explosion")),
     /**
      * In vanilla, this particle is displayed when either a creeper or
      * a tnt explodes.
@@ -599,7 +602,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    EXPLOSION_NORMAL(version -> version < 8 ? "NONE" : (version < 13 ? "EXPLOSION_NORMAL" : "poof"), DIRECTIONAL),
+    EXPLOSION_NORMAL(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "EXPLOSION_NORMAL" : "poof"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed after {@link #DRIPPING_DRIPSTONE_LAVA}
      * starts falling from pointed dripstones.
@@ -610,7 +613,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    FALLING_DRIPSTONE_LAVA(version -> version < 17 ? "NONE" : "falling_dripstone_lava"),
+    FALLING_DRIPSTONE_LAVA(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "falling_dripstone_lava"),
     /**
      * In vanilla, this particle is displayed after {@link #DRIPPING_DRIPSTONE_WATER}
      * starts falling from pointed dripstones.
@@ -621,7 +624,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    FALLING_DRIPSTONE_WATER(version -> version < 17 ? "NONE" : "falling_dripstone_water"),
+    FALLING_DRIPSTONE_WATER(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "falling_dripstone_water"),
     /**
      * In vanilla, this particle is displayed randomly by floating sand
      * and gravel.
@@ -633,7 +636,7 @@ public enum ParticleEffect {
      * <li>Extra: This particle needs a block texture in order to work.</li>
      * </ul>
      */
-    FALLING_DUST(version -> version < 10 ? "NONE" : (version < 13 ? "FALLING_DUST" : "falling_dust"), REQUIRES_BLOCK),
+    FALLING_DUST(version -> version.isBelow(MinecraftVersion.V1_10_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "FALLING_DUST" : "falling_dust"), REQUIRES_BLOCK),
     /**
      * In vanilla, this particle is displayed below beehives filled
      * with honey. As opposed to the {@link #DRIPPING_HONEY} particles,
@@ -646,7 +649,7 @@ public enum ParticleEffect {
      * <li>Extra: Spawns a {@link #LANDING_HONEY} after landing on a block.</li>
      * </ul>
      */
-    FALLING_HONEY(version -> version < 15 ? "NONE" : "falling_honey"),
+    FALLING_HONEY(version -> version.isBelow(MinecraftVersion.V1_15_R1) ? "NONE" : "falling_honey"),
     /**
      * In vanilla, this particle is displayed by bees that have pollen
      * and are on their way to the beehive.
@@ -657,7 +660,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    FALLING_NECTAR(version -> version < 15 ? "NONE" : "falling_nectar"),
+    FALLING_NECTAR(version -> version.isBelow(MinecraftVersion.V1_15_R1) ? "NONE" : "falling_nectar"),
     /**
      * In vanilla, this particle is displayed below crying obsidian
      * blocks.
@@ -668,7 +671,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    FALLING_OBSIDIAN_TEAR(version -> version < 16 ? "NONE" : "falling_obsidian_tear"),
+    FALLING_OBSIDIAN_TEAR(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "falling_obsidian_tear"),
     /**
      * In vanilla, this particle is displayed below spore blossoms.
      * <p>
@@ -678,7 +681,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    FALLING_SPORE_BLOSSOM(version -> version < 17 ? "NONE" : "falling_spore_blossom"),
+    FALLING_SPORE_BLOSSOM(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "falling_spore_blossom"),
     /**
      * In vanilla, this particle is displayed by firefly
      * bushes.
@@ -689,7 +692,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    FIREFLY(version -> version < 21.5 ? "NONE" : "firefly", DIRECTIONAL),
+    FIREFLY(version -> version.isBelow(MinecraftVersion.V1_21_R4) ? "NONE" : "firefly", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a firework is
      * launched.
@@ -700,7 +703,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    FIREWORKS_SPARK(version -> version < 8 ? "NONE" : (version < 13 ? "FIREWORKS_SPARK" : "firework"), DIRECTIONAL),
+    FIREWORKS_SPARK(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "FIREWORKS_SPARK" : "firework"), DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed by torches,
      * active furnaces,spawners and magma cubes.
@@ -712,7 +715,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    FLAME(version -> version < 8 ? "NONE" : (version < 13 ? "FLAME" : "flame"), DIRECTIONAL),
+    FLAME(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "FLAME" : "flame"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by exploding fireworks
      * <p>
@@ -723,7 +726,7 @@ public enum ParticleEffect {
      * <li>Extra: The color of this flash can't be set since it's only set clientside.</li>
      * </ul>
      */
-    FLASH(version -> version < 14 ? "NONE" : "flash"),
+    FLASH(version -> version.isBelow(MinecraftVersion.V1_14_R1) ? "NONE" : "flash"),
     /**
      * This particle is unused and is removed in the version 1.13.
      * <p>
@@ -733,7 +736,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    FOOTSTEP(version -> version > 8 && version < 13 ? "FOOTSTEP" : "NONE"),
+    FOOTSTEP(version -> version.isAbove(MinecraftVersion.V1_8_R1) && version.isBelow(MinecraftVersion.V1_13_R1) ? "FOOTSTEP" : "NONE"),
     /**
      * In vanilla, this particle is displayed by a glow squid.
      * <p>
@@ -745,7 +748,7 @@ public enum ParticleEffect {
      * is barely moveable.</li>
      * </ul>
      */
-    GLOW(version -> version < 17 ? "NONE" : "glow", DIRECTIONAL),
+    GLOW(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "glow", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by a glow squid when it gets hurt.
      * <p>
@@ -756,7 +759,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    GLOW_SQUID_INK(version -> version < 17 ? "NONE" : "glow_squid_ink", DIRECTIONAL),
+    GLOW_SQUID_INK(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "glow_squid_ink", DIRECTIONAL),
     /**
      * In vanilla, this particle is created when a wind charge hits a block.
      * <p>
@@ -766,7 +769,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    GUST(version -> version < 20.3 ? "NONE" : "gust", DIRECTIONAL),
+    GUST(version -> version.isBelow(MinecraftVersion.V1_20_R3) ? "NONE" : "gust", DIRECTIONAL),
     /**
      * In vanilla, this particle is created when a wind charge hits a block.
      * Spawns a number of gust particles.
@@ -777,7 +780,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    GUST_EMITTER_SMALL(version -> version < 20.5 ? "NONE" : "gust_emitter_small", DIRECTIONAL),
+    GUST_EMITTER_SMALL(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "gust_emitter_small", DIRECTIONAL),
     /**
      * In vanilla, this particle is created when a wind charge hits a block.
      * Spawns a number of gust particles.
@@ -788,7 +791,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    GUST_EMITTER_LARGE(version -> version < 20.5 ? "NONE" : "gust_emitter_large", DIRECTIONAL),
+    GUST_EMITTER_LARGE(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "gust_emitter_large", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when taming or
      * breeding animals.
@@ -799,7 +802,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    HEART(version -> version < 8 ? "NONE" : (version < 13 ? "HEART" : "heart")),
+    HEART(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "HEART" : "heart")),
     /**
      * In vanilla, this particle is displayed when an entity is
      * infected.
@@ -811,7 +814,7 @@ public enum ParticleEffect {
      * <li> The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    INFESTED(version -> version < 20.5 ? "NONE" : "infested", DIRECTIONAL),
+    INFESTED(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "infested", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by entities with
      * the weaving effect.
@@ -823,7 +826,7 @@ public enum ParticleEffect {
      * <li> The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    ITEM_COBWEB(version -> version < 20.5 ? "NONE" : "item_cobweb", DIRECTIONAL),
+    ITEM_COBWEB(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "item_cobweb", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a tool is
      * broken, an egg or a splash potion hits an entity or a block, It is
@@ -837,7 +840,7 @@ public enum ParticleEffect {
      * <li> This particle needs a item texture in order to work.</li></ul></li>
      * </ul>
      */
-    ITEM_CRACK(version -> version < 8 ? "NONE" : (version < 13 ? "ITEM_CRACK" : "item"), DIRECTIONAL, REQUIRES_ITEM),
+    ITEM_CRACK(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "ITEM_CRACK" : "item"), DIRECTIONAL, REQUIRES_ITEM),
     /**
      * In vanilla, this particle is displayed after a falling or
      * dripping Honey particle reaches a block.
@@ -849,7 +852,7 @@ public enum ParticleEffect {
      * <li>Extra: This Particle stays on the ground and doesn't instantly despawn.</li>
      * </ul>
      */
-    LANDING_HONEY(version -> version < 15 ? "NONE" : "landing_honey"),
+    LANDING_HONEY(version -> version.isBelow(MinecraftVersion.V1_15_R1) ? "NONE" : "landing_honey"),
     /**
      * In vanilla, this particle is displayed after a falling or
      * dripping obsidian tear reaches a block.
@@ -861,7 +864,7 @@ public enum ParticleEffect {
      * <li>Extra: This Particle stays on the ground and doesn't instantly despawn.</li>
      * </ul>
      */
-    LANDING_OBSIDIAN_TEAR(version -> version < 16 ? "NONE" : "landing_obsidian_tear"),
+    LANDING_OBSIDIAN_TEAR(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "landing_obsidian_tear"),
     /**
      * In vanilla, this particle is randomly displayed by lava.
      * <p>
@@ -871,7 +874,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    LAVA(version -> version < 8 ? "NONE" : (version < 13 ? "LAVA" : "lava")),
+    LAVA(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "LAVA" : "lava")),
     /**
      * <b>REPLACED BY {@link #BLOCK_MARKER} SINCE 1.18</b>
      * <p>
@@ -883,7 +886,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    LIGHT(version -> version != 17 ? "NONE" : "light"),
+    LIGHT(version -> !version.isEqual(MinecraftVersion.V1_17_R1) ? "NONE" : "light"),
     /**
      * In vanilla, this particle is displayed by elder guardians.
      * <p>
@@ -893,7 +896,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    MOB_APPEARANCE(version -> version < 8 ? "NONE" : (version < 13 ? "MOB_APPEARANCE" : "elder_guardian")),
+    MOB_APPEARANCE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "MOB_APPEARANCE" : "elder_guardian")),
     /**
      * In vanilla, this particle is displayed by active conduits.
      * <p>
@@ -904,7 +907,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    NAUTILUS(version -> version < 13 ? "NONE" : "nautilus", DIRECTIONAL),
+    NAUTILUS(version -> version.isBelow(MinecraftVersion.V1_13_R1) ? "NONE" : "nautilus", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when rightclicking
      * or activating a note block.
@@ -916,7 +919,7 @@ public enum ParticleEffect {
      * <li>Extra: the offsetX parameter represents which note should be displayed. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    NOTE(version -> version < 8 ? "NONE" : (version < 13 ? "NOTE" : "note"), COLORABLE),
+    NOTE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "NOTE" : "note"), COLORABLE),
     /**
      * In vanilla, it is unknown how this particle spawns.
      * // TODO: Update description once a use-case is defined.
@@ -928,7 +931,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    OMINOUS_SPAWNING(version -> version < 20.5 ? "NONE" : "ominous_spawning", DIRECTIONAL),
+    OMINOUS_SPAWNING(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "ominous_spawning", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed falling off pale oak leaves
      * in pale garden biomes.
@@ -939,7 +942,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    PALE_OAK_LEAVES(version -> version < 21.4 ? "NONE" : "pale_oak_leaves", DIRECTIONAL),
+    PALE_OAK_LEAVES(version -> version.isBelow(MinecraftVersion.V1_21_R3) ? "NONE" : "pale_oak_leaves", DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed by nether
      * portal, endermen, ender chests, dragon eggs, endermites and end
@@ -954,7 +957,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    PORTAL(version -> version < 8 ? "NONE" : (version < 13 ? "PORTAL" : "portal"), DIRECTIONAL),
+    PORTAL(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "PORTAL" : "portal"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by players and mobs with
      * the Raid Omen effect.
@@ -965,7 +968,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    RAID_OMEN(version -> version < 20.5 ? "NONE" : "raid_omen"),
+    RAID_OMEN(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "raid_omen"),
     /**
      * In vanilla, this particle is randomly displayed by active
      * redstone ore, active redstone, active redstone repeater and
@@ -980,7 +983,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    REDSTONE(version -> version < 8 ? "NONE" : (version < 13 ? "REDSTONE" : "dust"), COLORABLE, DUST),
+    REDSTONE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "REDSTONE" : "dust"), COLORABLE, DUST),
     /**
      * Currently Unused in vanilla. It's pretty much the same as the normal portal
      * particle but instead of flying to the original location it flies away at the specified
@@ -993,7 +996,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    REVERSE_PORTAL(version -> version < 16 ? "NONE" : "reverse_portal", DIRECTIONAL),
+    REVERSE_PORTAL(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "reverse_portal", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when oxidation is scraped off a copper block.
      * <p>
@@ -1004,7 +1007,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SCRAPE(version -> version < 17 ? "NONE" : "scrape", DIRECTIONAL),
+    SCRAPE(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "scrape", DIRECTIONAL),
     /**
      * <p>
      * <b>Information</b>:
@@ -1015,7 +1018,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SCULK_CHARGE(version -> version < 19 ? "NONE" : "sculk_charge", DIRECTIONAL),
+    SCULK_CHARGE(version -> version.isBelow(MinecraftVersion.V1_19_R1) ? "NONE" : "sculk_charge", DIRECTIONAL),
     /**
      * <p>
      * <b>Information</b>:
@@ -1025,7 +1028,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SCULK_CHARGE_POP(version -> version < 19 ? "NONE" : "sculk_charge_pop", DIRECTIONAL),
+    SCULK_CHARGE_POP(version -> version.isBelow(MinecraftVersion.V1_19_R1) ? "NONE" : "sculk_charge_pop", DIRECTIONAL),
     /**
      * <p>
      * <b>Information</b>:
@@ -1035,7 +1038,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SCULK_SOUL(version -> version < 19 ? "NONE" : "sculk_soul", DIRECTIONAL),
+    SCULK_SOUL(version -> version.isBelow(MinecraftVersion.V1_19_R1) ? "NONE" : "sculk_soul", DIRECTIONAL),
     /**
      * <p>
      * <b>Information</b>:
@@ -1045,7 +1048,7 @@ public enum ParticleEffect {
      * <li>Extra: You can set the delay before the particle appears using the {@link ShriekData} class.</li>
      * </ul>
      */
-    SHRIEK(version -> version < 19 ? "NONE" : "shriek"),
+    SHRIEK(version -> version.isBelow(MinecraftVersion.V1_19_R1) ? "NONE" : "shriek"),
     /**
      * In vanilla, this particle is displayed by jumping slimes.
      * <p>
@@ -1057,7 +1060,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    SLIME(version -> version < 8 ? "NONE" : (version < 13 ? "SLIME" : "item_slime")),
+    SLIME(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SLIME" : "item_slime")),
     /**
      * <p>
      * <b>Information</b>:
@@ -1067,7 +1070,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SMALL_FLAME(version -> version < 17 ? "NONE" : "small_flame", DIRECTIONAL),
+    SMALL_FLAME(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "small_flame", DIRECTIONAL),
     /**
      * In vanilla, this particle is produced by mobs with the Wind Charged effect.
      * <p>
@@ -1078,7 +1081,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SMALL_GUST(version -> version < 20.5 ? "NONE" : "small_gust", DIRECTIONAL),
+    SMALL_GUST(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "small_gust", DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed by fire, furnace
      * minecarts and blazes. It's also displayed when trying to place water
@@ -1093,7 +1096,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    SMOKE_LARGE(version -> version < 8 ? "NONE" : (version < 13 ? "SMOKE_LARGE" : "large_smoke"), DIRECTIONAL),
+    SMOKE_LARGE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SMOKE_LARGE" : "large_smoke"), DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed by primed
      * tnt, torches, end portals, active brewing stands, monster
@@ -1106,7 +1109,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    SMOKE_NORMAL(version -> version < 8 ? "NONE" : (version < 13 ? "SMOKE_NORMAL" : "smoke"), DIRECTIONAL),
+    SMOKE_NORMAL(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SMOKE_NORMAL" : "smoke"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by sneezing baby pandas.
      * <p>
@@ -1117,7 +1120,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SNEEZE(version -> version < 14 ? "NONE" : "sneeze", DIRECTIONAL),
+    SNEEZE(version -> version.isBelow(MinecraftVersion.V1_14_R1) ? "NONE" : "sneeze", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a snowball
      * hits an entity or a block.
@@ -1128,7 +1131,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    SNOWBALL(version -> version < 8 ? "NONE" : (version < 13 ? "SNOWBALL" : "item_snowball")),
+    SNOWBALL(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SNOWBALL" : "item_snowball")),
     /**
      * In vanilla, this particle is displayed when a player sinks in powder snow.
      * <p>
@@ -1139,7 +1142,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SNOWFLAKE(version -> version < 17 ? "NONE" : "snowflake", DIRECTIONAL),
+    SNOWFLAKE(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "snowflake", DIRECTIONAL),
     /**
      * This particle is unused and is merged into "poof" in 1.13.
      * <p>
@@ -1150,7 +1153,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SNOW_SHOVEL(version -> version < 8 ? "NONE" : (version < 13 ? "SNOW_SHOVEL" : "poof"), DIRECTIONAL),
+    SNOW_SHOVEL(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SNOW_SHOVEL" : "poof"), DIRECTIONAL),
     /**
      * <p>
      * <b>Information</b>:
@@ -1159,7 +1162,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    SONIC_BOOM(version -> version < 19 ? "NONE" : "sonic_boom"),
+    SONIC_BOOM(version -> version.isBelow(MinecraftVersion.V1_19_R1) ? "NONE" : "sonic_boom"),
     /**
      * In vanilla, this particle is displayed when a player walks
      * on soulsand with the soul speed enchantment.
@@ -1171,7 +1174,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SOUL(version -> version < 16 ? "NONE" : "soul", DIRECTIONAL),
+    SOUL(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "soul", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed by soul torches
      * <p>
@@ -1182,7 +1185,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SOUL_FIRE_FLAME(version -> version < 16 ? "NONE" : "soul_fire_flame", DIRECTIONAL),
+    SOUL_FIRE_FLAME(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "soul_fire_flame", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a splash potion or
      * an experience bottle hits a block or an entity. It's also displayed by
@@ -1195,7 +1198,7 @@ public enum ParticleEffect {
      * <li>Extra: Only the motion on the y-axis can be controlled, the motion on the x- and z-axis are multiplied by 0.1 when setting the values to 0</li>
      * </ul>
      */
-    SPELL(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL" : "effect")),
+    SPELL(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SPELL" : "effect")),
     /**
      * In vanilla, this particle is displayed when an instant splash
      * potion (e.g. instant health) hits a block or an entity.
@@ -1207,7 +1210,7 @@ public enum ParticleEffect {
      * <li>Extra: Only the motion on the y-axis can be controlled, the motion on the x- and z-axis are multiplied by 0.1 when setting the values to 0</li>
      * </ul>
      */
-    SPELL_INSTANT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_INSTANT" : "instant_effect")),
+    SPELL_INSTANT(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SPELL_INSTANT" : "instant_effect")),
     /**
      * In vanilla, this particle is displayed when an entity has
      * an active potion effect with the "ShowParticles" tag set to 1.
@@ -1219,7 +1222,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    SPELL_MOB(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB" : "entity_effect"), COLORABLE, REGULAR_COLOR),
+    SPELL_MOB(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SPELL_MOB" : "entity_effect"), COLORABLE, REGULAR_COLOR),
     /**
      * In vanilla, this particle is displayed when an entity has
      * an active potion effect from a nearby beacon.
@@ -1231,7 +1234,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    SPELL_MOB_AMBIENT(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_MOB_AMBIENT" : (version < 20.5 ? "ambient_entity_effect" : "entity_effect")), COLORABLE, REGULAR_COLOR),
+    SPELL_MOB_AMBIENT(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SPELL_MOB_AMBIENT" : (version.isBelow(MinecraftVersion.V1_20_R4) ? "ambient_entity_effect" : "entity_effect")), COLORABLE, REGULAR_COLOR),
     /**
      * In vanilla, this particle is displayed randomly by witches.
      * <p>
@@ -1242,7 +1245,7 @@ public enum ParticleEffect {
      * <li>Extra: Only the motion on the y-axis can be controlled, the motion on the x- and z-axis are multiplied by 0.1 when setting the values to 0</li>
      * </ul>
      */
-    SPELL_WITCH(version -> version < 8 ? "NONE" : (version < 13 ? "SPELL_WITCH" : "witch")),
+    SPELL_WITCH(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SPELL_WITCH" : "witch")),
     /**
      * In vanilla, this particle is displayed by llamas while
      * attacking an entity.
@@ -1254,7 +1257,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SPIT(version -> version < 11 ? "NONE" : (version < 13 ? "SPIT" : "spit")),
+    SPIT(version -> version.isBelow(MinecraftVersion.V1_11_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SPIT" : "spit")),
     /**
      * In vanilla, this particle is emitted around spore blossoms.
      * <p>
@@ -1264,7 +1267,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    SPORE_BLOSSOM_AIR(version -> version < 17 ? "NONE" : "spore_blossom_air"),
+    SPORE_BLOSSOM_AIR(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "spore_blossom_air"),
     /**
      * In vanilla, this particle is displayed when a squid gets
      * damaged.
@@ -1276,7 +1279,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    SQUID_INK(version -> version < 13 ? "NONE" : "squid_ink", DIRECTIONAL),
+    SQUID_INK(version -> version.isBelow(MinecraftVersion.V1_13_R1) ? "NONE" : "squid_ink", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed randomly in water.
      * <p>
@@ -1286,7 +1289,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    SUSPENDED(version -> version < 8 ? "NONE" : (version < 13 ? "SUSPENDED" : "underwater"), REQUIRES_WATER),
+    SUSPENDED(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SUSPENDED" : "underwater"), REQUIRES_WATER),
     /**
      * In vanilla, this particle is displayed when a player is close
      * to bedrock or the void.
@@ -1297,7 +1300,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    SUSPENDED_DEPTH(version -> version > 8 && version < 13 ? "SUSPENDED_DEPTH" : "NONE", DIRECTIONAL),
+    SUSPENDED_DEPTH(version -> version.isAbove(MinecraftVersion.V1_8_R1) && version.isBelow(MinecraftVersion.V1_13_R1) ? "SUSPENDED_DEPTH" : "NONE", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a Player hits
      * multiple entities at once with a sword.
@@ -1309,7 +1312,7 @@ public enum ParticleEffect {
      * <li>Extra: The size of this particle can be set in the offsetX parameter. The amount has to be 0 and the speed has to be 1.</li>
      * </ul>
      */
-    SWEEP_ATTACK(version -> version < 9 ? "NONE" : (version < 13 ? "SWEEP_ATTACK" : "sweep_attack"), RESIZEABLE),
+    SWEEP_ATTACK(version -> version.isBelow(MinecraftVersion.V1_9_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "SWEEP_ATTACK" : "sweep_attack"), RESIZEABLE),
     /**
      * In vanilla, this particle is displayed falling from trees.
      * <p>
@@ -1320,7 +1323,7 @@ public enum ParticleEffect {
      * <li>Extra: offsetX, offsetY and offsetZ represent the rgb values of the particle. The amount has to be 0 or the color won't work.</li>
      * </ul>
      */
-    TINTED_LEAVES(version -> version < 21.5 ? "NONE" : "tinted_leaves", COLORABLE, REGULAR_COLOR),
+    TINTED_LEAVES(version -> version.isBelow(MinecraftVersion.V1_21_R4) ? "NONE" : "tinted_leaves", COLORABLE, REGULAR_COLOR),
     /**
      * In vanilla, this particle is displayed when a totem of
      * undying is used.
@@ -1332,7 +1335,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    TOTEM(version -> version < 11 ? "NONE" : (version < 13 ? "TOTEM" : "totem_of_undying"), DIRECTIONAL),
+    TOTEM(version -> version.isBelow(MinecraftVersion.V1_11_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "TOTEM" : "totem_of_undying"), DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed by mycelium
      * blocks.
@@ -1344,7 +1347,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    TOWN_AURA(version -> version < 8 ? "NONE" : (version < 13 ? "TOWN_AURA" : "mycelium"), DIRECTIONAL),
+    TOWN_AURA(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "TOWN_AURA" : "mycelium"), DIRECTIONAL),
     /**
      * In vanilla, it is unknown how this particle spawns at this moment. This is an experimental particle.
      * <p>
@@ -1354,7 +1357,7 @@ public enum ParticleEffect {
      * <li>Extra: The color and target of this particle can be set with {@link TrailData}.</li>
      * </ul>
      */
-    TRAIL(version -> version < 21.3 ? "NONE" : "trail"),
+    TRAIL(version -> version.isBelow(MinecraftVersion.V1_21_R2) ? "NONE" : "trail"),
     /**
      * In vanilla, this particle is displayed by players and mobs with
      * the Trial Omen effect.
@@ -1365,7 +1368,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    TRIAL_OMEN(version -> version < 20.5 ? "NONE" : "trial_omen"),
+    TRIAL_OMEN(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "trial_omen"),
     /**
      * In vanilla, this particle is displayed when a Trial Spawner is activated.
      * <p>
@@ -1376,7 +1379,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set.</li>
      * </ul>
      */
-    TRIAL_SPAWNER_DETECTION(version -> version < 20.3 ? "NONE" : "trial_spawner_detection", DIRECTIONAL),
+    TRIAL_SPAWNER_DETECTION(version -> version.isBelow(MinecraftVersion.V1_20_R3) ? "NONE" : "trial_spawner_detection", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when an Ominous Trial Spawner is activated.
      * <p>
@@ -1387,7 +1390,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set.</li>
      * </ul>
      */
-    TRIAL_SPAWNER_DETECTION_OMINOUS(version -> version < 20.5 ? "NONE" : "trial_spawner_detection_ominous", DIRECTIONAL),
+    TRIAL_SPAWNER_DETECTION_OMINOUS(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "trial_spawner_detection_ominous", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed randomly when a
      * player is near a vault.
@@ -1397,7 +1400,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    VAULT_CONNECTION(version -> version < 20.5 ? "NONE" : "vault_connection"),
+    VAULT_CONNECTION(version -> version.isBelow(MinecraftVersion.V1_20_R4) ? "NONE" : "vault_connection"),
     /**
      * In vanilla, this particle is displayed when a sculk sensor is triggered.
      * <p>
@@ -1411,7 +1414,7 @@ public enum ParticleEffect {
      * <li>Extra: Takes a start and destination location. (More information: {@link VibrationData})</li>
      * </ul>
      */
-    VIBRATION(version -> version < 17 ? "NONE" : "vibration", DIRECTIONAL),
+    VIBRATION(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "vibration", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when attacking a village.
      * <p>
@@ -1421,7 +1424,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    VILLAGER_ANGRY(version -> version < 8 ? "NONE" : (version < 13 ? "VILLAGER_ANGRY" : "angry_villager")),
+    VILLAGER_ANGRY(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "VILLAGER_ANGRY" : "angry_villager")),
     /**
      * In vanilla, this particle is displayed when trading with a
      * villager, using bone meal on crops, feeding baby animals or walking on
@@ -1434,7 +1437,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    VILLAGER_HAPPY(version -> version < 8 ? "NONE" : (version < 13 ? "VILLAGER_HAPPY" : "happy_villager"), DIRECTIONAL),
+    VILLAGER_HAPPY(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "VILLAGER_HAPPY" : "happy_villager"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed in the warped forest
      * nether biome.
@@ -1446,7 +1449,7 @@ public enum ParticleEffect {
      * <li>Extra: This Particle gets a random velocity up.</li>
      * </ul>
      */
-    WARPED_SPORE(version -> version < 16 ? "NONE" : "warped_spore"),
+    WARPED_SPORE(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "warped_spore"),
     /**
      * In vanilla, this particle is displayed when an Entity is
      * swimming in water, a projectile flies into the water or a fish
@@ -1458,7 +1461,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    WATER_BUBBLE(version -> version < 8 ? "NONE" : (version < 13 ? "WATER_BUBBLE" : "bubble"), DIRECTIONAL, REQUIRES_WATER),
+    WATER_BUBBLE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "WATER_BUBBLE" : "bubble"), DIRECTIONAL, REQUIRES_WATER),
     /**
      * In vanilla, this particle is displayed when rain hits the ground.
      * <p>
@@ -1468,7 +1471,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    WATER_DROP(version -> version > 8 && version < 13 ? "WATER_DROP" : "NONE"),
+    WATER_DROP(version -> version.isAbove(MinecraftVersion.V1_8_R1) && version.isBelow(MinecraftVersion.V1_13_R1) ? "WATER_DROP" : "NONE"),
     /**
      * In vanilla, this particle is displayed when an Entity is
      * swimming in water, wolves shaking  off after swimming or boats.
@@ -1479,7 +1482,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    WATER_SPLASH(version -> version < 8 ? "NONE" : (version < 13 ? "WATER_SPLASH" : "splash"), DIRECTIONAL),
+    WATER_SPLASH(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "WATER_SPLASH" : "splash"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when a fish bites
      * onto the bait of a fishing rod.
@@ -1490,7 +1493,7 @@ public enum ParticleEffect {
      * <li>Speed value: Doesn't influence the particle.</li>
      * </ul>
      */
-    WATER_WAKE(version -> version < 8 ? "NONE" : (version < 13 ? "WATER_WAKE" : "fishing"), DIRECTIONAL),
+    WATER_WAKE(version -> version.isBelow(MinecraftVersion.V1_8_R1) ? "NONE" : (version.isBelow(MinecraftVersion.V1_13_R1) ? "WATER_WAKE" : "fishing"), DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when wax is removed from a copper block.
      * <p>
@@ -1501,7 +1504,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    WAX_OFF(version -> version < 17 ? "NONE" : "wax_off", DIRECTIONAL),
+    WAX_OFF(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "wax_off", DIRECTIONAL),
     /**
      * In vanilla, this particle is displayed when wax is applied to a copper block.
      * <p>
@@ -1512,7 +1515,7 @@ public enum ParticleEffect {
      * <li>Extra: The velocity of this particle can be set. The amount has to be 0.</li>
      * </ul>
      */
-    WAX_ON(version -> version < 17 ? "NONE" : "wax_on", DIRECTIONAL),
+    WAX_ON(version -> version.isBelow(MinecraftVersion.V1_17_R1) ? "NONE" : "wax_on", DIRECTIONAL),
     /**
      * In vanilla, this particle is randomly displayed in the
      * basalt deltas nether biome.
@@ -1527,7 +1530,7 @@ public enum ParticleEffect {
      * <li>Extra: This Particle gets a random velocity in the -x and -z directiont while falling down.</li>
      * </ul>
      */
-    WHITE_ASH(version -> version < 16 ? "NONE" : "white_ash"),
+    WHITE_ASH(version -> version.isBelow(MinecraftVersion.V1_16_R1) ? "NONE" : "white_ash"),
     /**
      * In vanilla, it is unknown how this particle spawns.
      * <p>
@@ -1537,7 +1540,7 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    WHITE_SMOKE(version -> version < 20.3 ? "NONE" : "white_smoke", DIRECTIONAL);
+    WHITE_SMOKE(version -> version.isBelow(MinecraftVersion.V1_20_R3) ? "NONE" : "white_smoke", DIRECTIONAL);
 
     /**
      * An array with all {@link ParticleEffect ParticleEffects}.
@@ -1545,23 +1548,40 @@ public enum ParticleEffect {
     public static final List<ParticleEffect> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     /**
      * A {@link HashMap} to store the nms instances of all currently supported
-     * {@link ParticleEffect ParticleEffects}.
+     * {@link ParticleEffect ParticleEffects}. This map is unmodifiable.
      */
     public static final Map<ParticleEffect, Object> NMS_EFFECTS;
+    /**
+     * A {@link List} to store all currently unsupported
+     * {@link ParticleEffect ParticleEffects}. This list is unmodifiable.
+     */
+    public static final List<ParticleEffect> UNSUPPORTED_EFFECTS;
 
     static {
-        //noinspection ConstantConditions
-        NMS_EFFECTS = Collections.unmodifiableMap(
-                VALUES.stream()
-                        .filter(effect -> !"NONE".equals(effect.getFieldName()))
-                        .collect(Collectors.toMap(Function.identity(), ParticleEffect::getNMSObject))
-        );
+        Map<ParticleEffect, Object> effects = new HashMap<>();
+        List<ParticleEffect> unsupported = new ArrayList<>();
+
+        for (ParticleEffect effect : VALUES) {
+            if ("NONE".equals(effect.getFieldName())) {
+                continue;
+            }
+
+            Object nms = effect.getNMSObject();
+            if (nms != null) {
+                effects.put(effect, nms);
+            } else {
+                unsupported.add(effect);
+            }
+        }
+
+        NMS_EFFECTS = Collections.unmodifiableMap(effects);
+        UNSUPPORTED_EFFECTS = Collections.unmodifiableList(unsupported);
     }
 
     /**
      * An {@link IntFunction} to get the name of the particle by checking the version.
      */
-    private final DoubleFunction<String> fieldNameMapper;
+    private final MinecraftVersionFunction<String> fieldNameMapper;
     /**
      * A list of {@link PropertyType properties}
      * the current particle instance supports.
@@ -1575,7 +1595,7 @@ public enum ParticleEffect {
      *                        respective particle.
      * @param properties      A list of {@link PropertyType properties} supported by this particle.
      */
-    ParticleEffect(DoubleFunction<String> fieldNameMapper, PropertyType... properties) {
+    ParticleEffect(MinecraftVersionFunction<String> fieldNameMapper, PropertyType... properties) {
         this.fieldNameMapper = fieldNameMapper;
         this.properties = Collections.unmodifiableList(Arrays.asList(properties));
     }
@@ -1585,8 +1605,21 @@ public enum ParticleEffect {
      *
      * @return all available effects.
      */
+    @NotNull
+    @Contract(pure = true)
     public static Set<ParticleEffect> getAvailableEffects() {
         return NMS_EFFECTS.keySet();
+    }
+
+    /**
+     * Returns a set of all currently unsupported {@link ParticleEffect ParticleEffects}.
+     *
+     * @return a set of unsupported {@link ParticleEffect ParticleEffects}.
+     */
+    @NotNull
+    @Contract(value = " -> new", pure = true)
+    public static Set<ParticleEffect> getUnsupportedEffects() {
+        return new HashSet<>(UNSUPPORTED_EFFECTS);
     }
 
     /**
@@ -1664,7 +1697,7 @@ public enum ParticleEffect {
         String fieldName = getFieldName();
         if ("NONE".equals(fieldName))
             return null;
-        if (ReflectionUtils.MINECRAFT_VERSION < 13)
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1))
             return Arrays.stream(ParticleConstants.PARTICLE_ENUM.getEnumConstants()).filter(effect -> effect.toString().equals(fieldName)).findFirst().orElse(null);
         else try {
             return REGISTRY_GET_METHOD.invoke(PARTICLE_TYPE_REGISTRY, ReflectionUtils.getMinecraftKey(fieldName));
@@ -1936,7 +1969,7 @@ public enum ParticleEffect {
      *
      * @return The field name mapper function.
      */
-    public DoubleFunction<String> getFieldNameMapper() {
+    public MinecraftVersionFunction<String> getFieldNameMapper() {
         return fieldNameMapper;
     }
 

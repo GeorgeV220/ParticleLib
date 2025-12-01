@@ -26,6 +26,7 @@ package com.georgev22.particle.data;
 
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.ParticleEffect;
+import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -66,7 +67,7 @@ public final class TrailData extends ParticleData {
      * Constructs a new {@link TrailData} instance.
      *
      * @param target The target of the particles to be displayed.
-     * @param color    The color of the particle.
+     * @param color  The color of the particle.
      */
     public TrailData(Location target, Color color, int duration) {
         this.target = target;
@@ -78,7 +79,7 @@ public final class TrailData extends ParticleData {
      * Constructs a new {@link TrailData} instance.
      *
      * @param target The target of the particles to be displayed.
-     * @param color    The color of the particle.
+     * @param color  The color of the particle.
      */
     public TrailData(Location target, Color color) {
         this.target = target;
@@ -97,12 +98,12 @@ public final class TrailData extends ParticleData {
      */
     @Override
     public Object toNMSData() {
-        if (ReflectionUtils.MINECRAFT_VERSION < 21.3 || getEffect() != ParticleEffect.TRAIL)
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R2) || getEffect() != ParticleEffect.TRAIL)
             return null;
         try {
             Object vec3D = ReflectionUtils.createVec3D(target.getX(), target.getY(), target.getZ());
 
-            if (ReflectionUtils.MINECRAFT_VERSION < 21.4) {
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R3)) {
                 return ParticleConstants.TRAIL_PARTICLE_OPTION_CONSTRUCTOR.newInstance(vec3D, color.getRGB());
             }
             return ParticleConstants.TRAIL_PARTICLE_OPTION_CONSTRUCTOR.newInstance(vec3D, color.getRGB(), duration);
