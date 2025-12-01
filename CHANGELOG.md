@@ -1,3 +1,18 @@
+# [1.5.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.4.0...v1.5.0) (2025-12-01)
+
+
+### Bug Fixes
+
+* improve version comparison logic for particle mappings ([3526f37](https://github.com/GeorgeV220/ParticleLib/commit/3526f37a5c1263fc5422ddae5847ee54cd9165b7))
+
+
+### Features
+
+* 1.21.10 and better version checkup ([cc1b49c](https://github.com/GeorgeV220/ParticleLib/commit/cc1b49cc87814b14aa08886a9a2cdf81ca7e11a3))
+* filter out null NMS objects in ParticleEffect initialization ([f9139c9](https://github.com/GeorgeV220/ParticleLib/commit/f9139c976ff0d7da3a7be1c09c8e185baee8a4d5))
+* improve particle effect initialization and add unsupported effects tracking ([4892ed8](https://github.com/GeorgeV220/ParticleLib/commit/4892ed80d3e2b044d345a5559f3f1ab6feccce0f))
+* replace double version checks with MinecraftVersion enum ([32873b3](https://github.com/GeorgeV220/ParticleLib/commit/32873b334792564da560cf4ffa366ab2f25eb2ed))
+
 # [1.5.0-alpha.4](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0-alpha.3...v1.5.0-alpha.4) (2025-11-20)
 
 
