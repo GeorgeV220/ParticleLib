@@ -1,3 +1,10 @@
+# [1.6.0-alpha.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0...v1.6.0-alpha.1) (2025-12-10)
+
+
+### Features
+
+* add Minecraft version 1.21.11 support ([79b2e6a](https://github.com/GeorgeV220/ParticleLib/commit/79b2e6af6286315cb3c007a83427384a9d6a9cf5))
+
 # [1.5.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.4.0...v1.5.0) (2025-12-01)
 
 
