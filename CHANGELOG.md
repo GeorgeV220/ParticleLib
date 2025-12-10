@@ -1,3 +1,10 @@
+# [1.6.0-alpha.2](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.1...v1.6.0-alpha.2) (2025-12-10)
+
+
+### Features
+
+* update Minecraft version and improve NMS particle resolution ([dd0cd91](https://github.com/GeorgeV220/ParticleLib/commit/dd0cd91bdd42ec03e525a440340da9e453bb8a0d))
+
 # [1.6.0-alpha.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0...v1.6.0-alpha.1) (2025-12-10)
 
 
