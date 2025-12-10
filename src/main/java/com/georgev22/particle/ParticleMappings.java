@@ -3,12 +3,16 @@ package com.georgev22.particle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
+import org.jspecify.annotations.NonNull;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -156,5 +160,15 @@ public class ParticleMappings {
         String mapped = mappings.get(name);
         if (mapped == null) return null;
         return getFieldOrNull(targetClass, mapped, declared);
+    }
+
+    /**
+     * Gets an unmodifiable view of the mappings.
+     *
+     * @return an unmodifiable view of the mappings
+     */
+    @Contract(pure = true)
+    public static @NonNull @UnmodifiableView Map<String, String> getMappings() {
+        return Collections.unmodifiableMap(mappings);
     }
 }
