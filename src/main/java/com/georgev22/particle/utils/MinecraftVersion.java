@@ -48,6 +48,7 @@ public enum MinecraftVersion {
     V1_21_R4(new SubVersionRange("1.21", 5)),
     V1_21_R5(new SubVersionRange("1.21", 6, 8)),
     V1_21_R6(new SubVersionRange("1.21", 9, 10)),
+    V1_21_R7(new SubVersionRange("1.21", 11)),
 
     /**
      * Fallback value when no version could be detected.
