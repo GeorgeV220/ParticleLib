@@ -1,3 +1,10 @@
+# [1.6.0-alpha.3](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.2...v1.6.0-alpha.3) (2025-12-10)
+
+
+### Features
+
+* add getMappings method for unmodifiable view of particle mappings ([381c98b](https://github.com/GeorgeV220/ParticleLib/commit/381c98bc4f17c333e932032b1fa6817d256f3853))
+
 # [1.6.0-alpha.2](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.1...v1.6.0-alpha.2) (2025-12-10)
 
 
