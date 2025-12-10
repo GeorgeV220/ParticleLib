@@ -34,10 +34,10 @@ import com.georgev22.particle.utils.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
@@ -1687,23 +1687,63 @@ public enum ParticleEffect {
     }
 
     /**
-     * Gets the nms instance of the current {@link ParticleEffect} instance.
+     * Retrieves the underlying NMS particle object associated with this {@link ParticleEffect}.
+     * <p>
+     * This method attempts to resolve the particle using cached reflection results or by querying
+     * the NMS particle registry. If resolution fails for any reason, this method returns {@code null}.
      *
-     * @return The NMS instance or {@code null} if the particle isn't supported in the current minecraft version.
+     * @return the resolved NMS particle object, or {@code null} if unsupported or lookup fails.
      */
+    @Nullable
     public Object getNMSObject() {
-        if (NMS_EFFECTS != null && NMS_EFFECTS.containsKey(this))
-            return NMS_EFFECTS.get(this);
-        String fieldName = getFieldName();
-        if ("NONE".equals(fieldName))
-            return null;
-        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1))
-            return Arrays.stream(ParticleConstants.PARTICLE_ENUM.getEnumConstants()).filter(effect -> effect.toString().equals(fieldName)).findFirst().orElse(null);
-        else try {
-            return REGISTRY_GET_METHOD.invoke(PARTICLE_TYPE_REGISTRY, ReflectionUtils.getMinecraftKey(fieldName));
+        try {
+            return getNMSObjectOrThrow();
         } catch (Exception ignored) {
+            return null;
         }
-        return null;
+    }
+
+    /**
+     * Retrieves the underlying NMS particle object associated with this {@link ParticleEffect}.
+     * <p>
+     * This method behaves similarly to {@link #getNMSObject()}, but will throw an exception
+     * if the particle cannot be found or is unsupported in the current Minecraft version.
+     *
+     * @return the resolved NMS particle object
+     * @throws IllegalStateException if the particle cannot be resolved or is not supported
+     */
+    public Object getNMSObjectOrThrow() {
+        if (NMS_EFFECTS != null) {
+            Object cached = NMS_EFFECTS.get(this);
+            if (cached != null) {
+                return cached;
+            }
+        }
+
+        final String fieldName = getFieldName();
+
+        if ("NONE".equals(fieldName)) {
+            throw new IllegalStateException("ParticleEffect 'NONE' does not map to any NMS particle.");
+        }
+
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1)) {
+            Object enumConstant = Arrays.stream(ParticleConstants.PARTICLE_ENUM.getEnumConstants())
+                    .filter(effect -> effect.toString().equals(fieldName))
+                    .findFirst()
+                    .orElse(null);
+
+            if (enumConstant == null) {
+                throw new IllegalStateException("Legacy particle '" + fieldName + "' not found in enum.");
+            }
+            return enumConstant;
+        }
+
+        try {
+            Object key = ReflectionUtils.getMinecraftKey(fieldName);
+            return REGISTRY_GET_METHOD.invoke(PARTICLE_TYPE_REGISTRY, key);
+        } catch (Exception ex) {
+            throw new IllegalStateException("Could not resolve NMS particle for '" + fieldName + "'.", ex);
+        }
     }
 
 
