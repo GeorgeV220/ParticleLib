@@ -1,3 +1,9 @@
 name: ParticleLib
 version: ${version}
 main: com.georgev22.particle.MainPlugin
+commands:
+  chunksee:
+    description: ChunkSee command
+    usage: /chunksee
+    permission: particle.chunksee
+    permission-message: You do not have permission to use this command.

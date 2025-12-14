@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.jspecify.annotations.NonNull;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
@@ -168,7 +167,7 @@ public class ParticleMappings {
      * @return an unmodifiable view of the mappings
      */
     @Contract(pure = true)
-    public static @NonNull @UnmodifiableView Map<String, String> getMappings() {
+    public static @NotNull @UnmodifiableView Map<String, String> getMappings() {
         return Collections.unmodifiableMap(mappings);
     }
 }
