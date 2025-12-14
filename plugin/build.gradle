@@ -1,0 +1,43 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'java'
+    id 'idea'
+}
+
+ext {
+    mcVersion = project.property("mcVersion")
+}
+
+group project.property("group")
+description project.property("description") as String
+version project.property("version")
+
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/')
+    }
+
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    compileOnly "org.spigotmc:spigot-api:${mcVersion}-R0.1-SNAPSHOT"
+    compileOnly "org.jetbrains:annotations:24.0.0"
+    implementation project(':lib')
+}
+
+
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+shadowJar {
+    archiveClassifier.set('plugin')
+}
