@@ -25,6 +25,7 @@ public class ChunkCommand implements CommandExecutor {
                 this.mainPlugin.getChunkSeeManager().addPlayer(player);
                 sender.sendMessage("ChunkSee enabled");
             }
+            return true;
         }
         sender.sendMessage("Only players can use this command.");
         return true;
