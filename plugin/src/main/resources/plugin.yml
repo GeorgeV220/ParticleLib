@@ -1,0 +1,3 @@
+name: ParticleLib
+version: ${version}
+main: com.georgev22.particle.MainPlugin

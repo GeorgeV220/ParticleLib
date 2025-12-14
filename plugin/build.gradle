@@ -38,6 +38,19 @@ java {
     withJavadocJar()
 }
 
+processResources {
+    filesMatching('plugin.yml') {
+        expand(project.properties)
+    }
+}
+
 shadowJar {
+    archiveBaseName.set("particle")
     archiveClassifier.set('plugin')
 }
+
+tasks.compileJava {
+    dependsOn(":lib:shadowJar")
+}
+
+tasks.shadowJar.dependsOn("build")

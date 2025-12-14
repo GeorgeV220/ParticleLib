@@ -49,5 +49,6 @@ java {
 }
 
 shadowJar {
+    archiveBaseName.set("particle")
     archiveClassifier.set('')
 }
