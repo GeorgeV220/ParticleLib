@@ -1,6 +1,7 @@
 name: ParticleLib-Test
 version: ${version}
 main: com.georgev22.particle.MainPlugin
+api-version: 1.13
 commands:
   chunksee:
     description: ChunkSee command
