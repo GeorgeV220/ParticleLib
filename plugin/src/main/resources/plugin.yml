@@ -1,4 +1,4 @@
-name: ParticleLib
+name: ParticleLib-Test
 version: ${version}
 main: com.georgev22.particle.MainPlugin
 commands:
