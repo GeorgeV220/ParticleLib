@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id "com.gradleup.shadow" version "8.3.9"
     id 'java'
     id 'idea'
 }
@@ -42,6 +42,7 @@ dependencies {
 
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.targetCompatibility = JavaVersion.VERSION_1_8
 
 java {
     withSourcesJar()
