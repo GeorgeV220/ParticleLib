@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Manages displaying particle outlines around the chunk
@@ -127,38 +128,42 @@ public class ChunkSeeManager {
         }
 
         task = this.mainPlugin.getMinecraftScheduler()
-                .createAsyncRepeatingTask(() -> {
-                    for (Player player : this.chunk) {
-                        Location loc = player.getLocation();
-                        Chunk c = loc.getChunk();
+                .createRepeatingTask(() -> {
+                    try {
+                        for (Player player : this.chunk) {
+                            Location loc = player.getLocation();
+                            Chunk c = loc.getChunk();
 
-                        int minX = c.getX() * 16;
-                        int minZ = c.getZ() * 16;
+                            int minX = c.getX() * 16;
+                            int minZ = c.getZ() * 16;
 
-                        int maxX = minX + 16;
-                        int maxZ = minZ + 16;
+                            int maxX = minX + 16;
+                            int maxZ = minZ + 16;
 
-                        int minY = loc.getBlockY();
+                            int minY = loc.getBlockY();
 
-                        for (int x = minX; x < minX + 17; x++) {
-                            displayEffect(player,
-                                    new Location(player.getWorld(), x, minY, minZ));
+                            for (int x = minX; x < minX + 17; x++) {
+                                displayEffect(player,
+                                        new Location(player.getWorld(), x, minY, minZ));
+                            }
+
+                            for (int z = minZ; z < minZ + 17; z++) {
+                                displayEffect(player,
+                                        new Location(player.getWorld(), minX, minY, z));
+                            }
+
+                            for (int x = maxX; x > maxX - 17; x--) {
+                                displayEffect(player,
+                                        new Location(player.getWorld(), x, minY, maxZ));
+                            }
+
+                            for (int z = maxZ; z > maxZ - 17; z--) {
+                                displayEffect(player,
+                                        new Location(player.getWorld(), maxX, minY, z));
+                            }
                         }
-
-                        for (int z = minZ; z < minZ + 17; z++) {
-                            displayEffect(player,
-                                    new Location(player.getWorld(), minX, minY, z));
-                        }
-
-                        for (int x = maxX; x > maxX - 17; x--) {
-                            displayEffect(player,
-                                    new Location(player.getWorld(), x, minY, maxZ));
-                        }
-
-                        for (int z = maxZ; z > maxZ - 17; z--) {
-                            displayEffect(player,
-                                    new Location(player.getWorld(), maxX, minY, z));
-                        }
+                    } catch (Throwable t) {
+                        mainPlugin.getLogger().log(Level.SEVERE, "Failed", t);
                     }
                 }, 5L, 20);
     }
