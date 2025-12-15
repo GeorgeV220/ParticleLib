@@ -32,7 +32,7 @@ publishing {
     publications {
         shadow(MavenPublication) { publication ->
             project.shadow.component(publication)
-            artifactId = project.getName().toLowerCase()
+            artifactId = project.findProperty("artifact").toString().toLowerCase() ?: project.getName().toLowerCase()
             groupId = ((String) project.getGroup()).toLowerCase()
             artifact sourcesJar
             artifact javadocJar
