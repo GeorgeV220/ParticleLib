@@ -1,3 +1,10 @@
+# [1.6.0-alpha.5](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.4...v1.6.0-alpha.5) (2025-12-15)
+
+
+### Bug Fixes
+
+* **publish:** correct Maven coordinates for lib submodule ([df2703d](https://github.com/GeorgeV220/ParticleLib/commit/df2703df894bd0f8be4fdda606b89f9f9e3fed49))
+
 # [1.6.0-alpha.4](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.3...v1.6.0-alpha.4) (2025-12-15)
 
 
