@@ -1,3 +1,18 @@
+# [1.6.0-alpha.4](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.3...v1.6.0-alpha.4) (2025-12-15)
+
+
+### Bug Fixes
+
+* Add API version specification to plugin.yml ([51cad39](https://github.com/GeorgeV220/ParticleLib/commit/51cad39aaed8014efaf681c72e1c40285ae21515))
+* add missing return statement in ChunkCommand ([95e6d27](https://github.com/GeorgeV220/ParticleLib/commit/95e6d27caadce8cde033704cc929ac382901f4e1))
+* improve version detection and Spigot server compatibility ([e6830aa](https://github.com/GeorgeV220/ParticleLib/commit/e6830aafe5bc835880df70eb547bfb56ef6a98e3))
+* wrap chunk particle task in try-catch and change to sync scheduler ([28f132b](https://github.com/GeorgeV220/ParticleLib/commit/28f132b8da2ff64349104b56084ec9ae17c9b40f))
+
+
+### Features
+
+* add chunk visualization feature and scheduler abstraction ([0df789f](https://github.com/GeorgeV220/ParticleLib/commit/0df789fc312a093abde75accf8bc2d336045ee58))
+
 # [1.6.0-alpha.3](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.2...v1.6.0-alpha.3) (2025-12-10)
 
 
