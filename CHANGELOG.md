@@ -1,3 +1,10 @@
+# [1.6.0-alpha.6](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.5...v1.6.0-alpha.6) (2025-12-22)
+
+
+### Bug Fixes
+
+* **ParticleEffect:** add NONE particles to unsupported effects list ([1219c0f](https://github.com/GeorgeV220/ParticleLib/commit/1219c0fe5e652c9b862b863339cf82fdf45b2d14))
+
 # [1.6.0-alpha.5](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.4...v1.6.0-alpha.5) (2025-12-15)
 
 
