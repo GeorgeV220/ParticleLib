@@ -1563,6 +1563,7 @@ public enum ParticleEffect {
 
         for (ParticleEffect effect : VALUES) {
             if ("NONE".equals(effect.getFieldName())) {
+                unsupported.add(effect);
                 continue;
             }
 
