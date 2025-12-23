@@ -1,3 +1,23 @@
+# [1.6.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0...v1.6.0) (2025-12-23)
+
+
+### Bug Fixes
+
+* Add API version specification to plugin.yml ([51cad39](https://github.com/GeorgeV220/ParticleLib/commit/51cad39aaed8014efaf681c72e1c40285ae21515))
+* add missing return statement in ChunkCommand ([95e6d27](https://github.com/GeorgeV220/ParticleLib/commit/95e6d27caadce8cde033704cc929ac382901f4e1))
+* improve version detection and Spigot server compatibility ([e6830aa](https://github.com/GeorgeV220/ParticleLib/commit/e6830aafe5bc835880df70eb547bfb56ef6a98e3))
+* **ParticleEffect:** add NONE particles to unsupported effects list ([1219c0f](https://github.com/GeorgeV220/ParticleLib/commit/1219c0fe5e652c9b862b863339cf82fdf45b2d14))
+* **publish:** correct Maven coordinates for lib submodule ([df2703d](https://github.com/GeorgeV220/ParticleLib/commit/df2703df894bd0f8be4fdda606b89f9f9e3fed49))
+* wrap chunk particle task in try-catch and change to sync scheduler ([28f132b](https://github.com/GeorgeV220/ParticleLib/commit/28f132b8da2ff64349104b56084ec9ae17c9b40f))
+
+
+### Features
+
+* add chunk visualization feature and scheduler abstraction ([0df789f](https://github.com/GeorgeV220/ParticleLib/commit/0df789fc312a093abde75accf8bc2d336045ee58))
+* add getMappings method for unmodifiable view of particle mappings ([381c98b](https://github.com/GeorgeV220/ParticleLib/commit/381c98bc4f17c333e932032b1fa6817d256f3853))
+* add Minecraft version 1.21.11 support ([79b2e6a](https://github.com/GeorgeV220/ParticleLib/commit/79b2e6af6286315cb3c007a83427384a9d6a9cf5))
+* update Minecraft version and improve NMS particle resolution ([dd0cd91](https://github.com/GeorgeV220/ParticleLib/commit/dd0cd91bdd42ec03e525a440340da9e453bb8a0d))
+
 # [1.6.0-alpha.6](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0-alpha.5...v1.6.0-alpha.6) (2025-12-22)
 
 
