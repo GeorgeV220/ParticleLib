@@ -24,7 +24,6 @@
 package com.georgev22.particle.utils;
 
 import com.georgev22.particle.ParticleConstants;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -95,11 +94,13 @@ public final class ReflectionUtils {
     private static Plugin plugin;
 
     static {
-        String serverPath = Bukkit.getServer().getClass().getPackage().getName();
-        String version = serverPath.substring(serverPath.lastIndexOf(".") + 1);
         MINECRAFT_VERSION = MinecraftVersion.getCurrentVersion();
+        String version = MinecraftVersion.getCurrentVersionNameVtoLowerCase();
         NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1) ? ".server." + version : "");
-        CRAFT_BUKKIT_PACKAGE_PATH = MINECRAFT_VERSION.isAbove(MinecraftVersion.V1_20_R3) ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + version;
+        CRAFT_BUKKIT_PACKAGE_PATH =
+                MINECRAFT_VERSION.isAbove(MinecraftVersion.V1_20_R3) && isPaper()
+                        ? "org.bukkit.craftbukkit"
+                        : "org.bukkit.craftbukkit." + version;
         plugin = readDeclaredField(PLUGIN_CLASS_LOADER_PLUGIN_FIELD, ReflectionUtils.class.getClassLoader());
         PLAYER_CONNECTION_CACHE = new PlayerConnectionCache();
         try {
@@ -554,6 +555,21 @@ public final class ReflectionUtils {
         } catch (IOException ex) {
             return null;
         }
+    }
+
+    public static boolean isPaper() {
+        try {
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+        }
+        try {
+            Class.forName("io.papermc.paper.configuration.Configuration");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+        }
+
+        return false;
     }
 
 }

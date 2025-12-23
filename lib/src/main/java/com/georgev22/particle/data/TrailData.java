@@ -28,7 +28,6 @@ import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.ParticleEffect;
 import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
-import lombok.Getter;
 import org.bukkit.Location;
 
 import java.awt.*;
@@ -44,7 +43,6 @@ import java.awt.*;
  * @author Nicholas V
  * @see ParticleEffect#TRAIL
  */
-@Getter
 public final class TrailData extends ParticleData {
 
     /**
@@ -111,5 +109,47 @@ public final class TrailData extends ParticleData {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    /**
+     * Gets the target {@link Location} where the trail particle will move to.
+     *
+     * @return the target location of the particle trail
+     */
+    public Location getTarget() {
+        return target;
+    }
+
+    /**
+     * Gets the duration of the trail particle.
+     * <p>
+     * A value of {@code -1} indicates that the duration is not specified
+     * and the default client behavior will be used.
+     *
+     * @return the duration of the particle, or {@code -1} if unspecified
+     */
+    public int getDuration() {
+        return duration;
+    }
+
+    /**
+     * Gets the {@link Color} of the trail particle.
+     *
+     * @return the color used for the particle trail
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * Gets the {@link ParticleEffect} associated with this data object.
+     * <p>
+     * This should always return {@link ParticleEffect#TRAIL}.
+     *
+     * @return the particle effect type
+     */
+    @Override
+    public ParticleEffect getEffect() {
+        return super.getEffect();
     }
 }
