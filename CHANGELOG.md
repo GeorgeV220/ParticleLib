@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0...v1.6.1) (2025-12-28)
+
+
+### Bug Fixes
+
+* **ParticlePacket:** enforce new packet constructor for 1.21.4 and above instead of 1.21.5 ([f562f54](https://github.com/GeorgeV220/ParticleLib/commit/f562f54c8b9e055c95e4ed34e66fa7a94989624b))
+
 # [1.6.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.5.0...v1.6.0) (2025-12-23)
 
 
