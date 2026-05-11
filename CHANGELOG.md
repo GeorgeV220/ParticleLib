@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.1...v1.7.0) (2026-05-11)
+
+
+### Features
+
+* add particle pause/resume growth types and update MC 26.1 mappings ([f8278b9](https://github.com/GeorgeV220/ParticleLib/commit/f8278b9b22826e2d840e672b437b4981b015831a))
+
 ## [1.6.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.0...v1.6.1) (2025-12-28)
 
 
