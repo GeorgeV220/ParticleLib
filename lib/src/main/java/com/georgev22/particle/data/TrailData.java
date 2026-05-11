@@ -26,7 +26,6 @@ package com.georgev22.particle.data;
 
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.ParticleEffect;
-import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 import org.bukkit.Location;
 
@@ -96,12 +95,12 @@ public final class TrailData extends ParticleData {
      */
     @Override
     public Object toNMSData() {
-        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R2) || getEffect() != ParticleEffect.TRAIL)
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 21, 2) || getEffect() != ParticleEffect.TRAIL)
             return null;
         try {
             Object vec3D = ReflectionUtils.createVec3D(target.getX(), target.getY(), target.getZ());
 
-            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R3)) {
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 21, 4)) {
                 return ParticleConstants.TRAIL_PARTICLE_OPTION_CONSTRUCTOR.newInstance(vec3D, color.getRGB());
             }
             return ParticleConstants.TRAIL_PARTICLE_OPTION_CONSTRUCTOR.newInstance(vec3D, color.getRGB(), duration);

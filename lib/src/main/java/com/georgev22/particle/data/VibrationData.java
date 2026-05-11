@@ -26,7 +26,6 @@ package com.georgev22.particle.data;
 
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.ParticleEffect;
-import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -166,12 +165,12 @@ public final class VibrationData extends ParticleData {
      */
     @Override
     public Object toNMSData() {
-        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1) || getEffect() != ParticleEffect.VIBRATION)
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 17) || getEffect() != ParticleEffect.VIBRATION)
             return null;
         boolean isBlockDest = blockDestination != null;
         Object start = ReflectionUtils.createBlockPosition(getStart());
         try {
-            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_19_R1)) {
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 19)) {
                 Object source;
                 if (isBlockDest) {
                     Object dest = ReflectionUtils.createBlockPosition(getBlockDestination());

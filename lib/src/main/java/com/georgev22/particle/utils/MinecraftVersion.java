@@ -1,272 +1,252 @@
 package com.georgev22.particle.utils;
 
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
- * Represents supported Minecraft server versions and provides
- * utilities for version detection and comparison.
- *
- * <p>This enum resolves the running server version at runtime
- * and allows safe version comparisons.</p>
+ * Represents a Minecraft server version using a numeric format (major.minor.patch).
  */
-public enum MinecraftVersion {
+public final class MinecraftVersion implements Comparable<MinecraftVersion> {
 
-    V_1_7_R1(new SubVersionRange("1.7", 2, 4)),
-    V_1_7_R2(new SubVersionRange("1.7", 5, 7)),
-    V_1_7_R3(new SubVersionRange("1.7", 8, 9)),
-    V_1_7_R4(new SubVersionRange("1.7", 10)),
-    V1_8_R1(new SubVersionRange("1.8", 0, 1)),
-    V1_8_R2(new SubVersionRange("1.8", 3, 3)),
-    V1_8_R3(new SubVersionRange("1.8", 4, 9)),
-    V1_9_R1(new SubVersionRange("1.9", 0, 2)),
-    V1_9_R2(new SubVersionRange("1.9", 4)),
-    V1_10_R1(new SubVersionRange("1.10", 0, 2)),
-    V1_11_R1(new SubVersionRange("1.11", 0, 2)),
-    V1_12_R1(new SubVersionRange("1.12", 0, 2)),
-    V1_13_R1(new SubVersionRange("1.13", 0, 1)),
-    V1_13_R2(new SubVersionRange("1.13", 2)),
-    V1_14_R1(new SubVersionRange("1.14", 0, 4)),
-    V1_15_R1(new SubVersionRange("1.15", 0, 2)),
-    V1_16_R1(new SubVersionRange("1.16", 0, 1)),
-    V1_16_R2(new SubVersionRange("1.16", 2, 3)),
-    V1_16_R3(new SubVersionRange("1.16", 4, 5)),
-    V1_17_R1(new SubVersionRange("1.17", 0, 1)),
-    V1_18_R1(new SubVersionRange("1.18", 0, 1)),
-    V1_18_R2(new SubVersionRange("1.18", 2)),
-    V1_19_R1(new SubVersionRange("1.19", 0, 2)),
-    V1_19_R2(new SubVersionRange("1.19", 3)),
-    V1_19_R3(new SubVersionRange("1.19", 4)),
-    V1_20_R1(new SubVersionRange("1.20", 0, 1)),
-    V1_20_R2(new SubVersionRange("1.20", 2)),
-    V1_20_R3(new SubVersionRange("1.20", 3, 4)),
-    V1_20_R4(new SubVersionRange("1.20", 5, 6)),
-    V1_21_R1(new SubVersionRange("1.21", 0, 1)),
-    V1_21_R2(new SubVersionRange("1.21", 2, 3)),
-    V1_21_R3(new SubVersionRange("1.21", 4)),
-    V1_21_R4(new SubVersionRange("1.21", 5)),
-    V1_21_R5(new SubVersionRange("1.21", 6, 8)),
-    V1_21_R6(new SubVersionRange("1.21", 9, 10)),
-    V1_21_R7(new SubVersionRange("1.21", 11)),
+    private final int major;
+    private final int minor;
+    private final int patch;
 
     /**
-     * Fallback value when no version could be detected.
+     * The current server version, parsed once during class initialization.
      */
-    UNKNOWN(new SubVersionRange("UNKNOWN", 0, 0));
-
-    private static MinecraftVersion currentVersion;
-
-    private static int versionNumber, releaseNumber;
+    private static final MinecraftVersion CURRENT;
 
     static {
+        CURRENT = parse(Bukkit.getServer().getBukkitVersion());
+    }
+
+    /**
+     * Constructs a new {@link MinecraftVersion}.
+     *
+     * @param major the major version (e.g. 1 or 26)
+     * @param minor the minor version (e.g. 21 or 1)
+     * @param patch the patch version (e.g. 4 or 11)
+     */
+    public MinecraftVersion(int major, int minor, int patch) {
+        this.major = major;
+        this.minor = minor;
+        this.patch = patch;
+    }
+
+    /**
+     * Returns the current Minecraft server version.
+     *
+     * @return the parsed server version
+     */
+    public static MinecraftVersion getCurrent() {
+        return CURRENT;
+    }
+
+    /**
+     * Parses a Bukkit version string into a {@link MinecraftVersion}.
+     * <p>
+     * Examples of supported formats:
+     * <ul>
+     *     <li>{@code 1.21.4-R0.1-SNAPSHOT}</li>
+     *     <li>{@code 26.1.1}</li>
+     * </ul>
+     *
+     * @param bukkitVersion the raw version string from Bukkit
+     * @return a parsed {@link MinecraftVersion}, or {@code 0.0.0} if parsing fails
+     */
+    public static MinecraftVersion parse(String bukkitVersion) {
         try {
-            String bukkitVersion = Bukkit.getServer().getBukkitVersion();
-            String[] versionParts = bukkitVersion.split("-")[0].split("\\.");
+            String versionPart = bukkitVersion.split("-")[0];
+            String[] parts = versionPart.split("\\.");
 
-            if (versionParts.length >= 2) {
-                int majorVersion = Integer.parseInt(versionParts[0]);
-                int minorVersion = Integer.parseInt(versionParts[1]);
-                int patchVersion = versionParts.length >= 3 ? Integer.parseInt(versionParts[2]) : 0;
-                for (MinecraftVersion version : MinecraftVersion.values()) {
-                    if (version.subVersionRange.version.equals(majorVersion + "." + minorVersion) &&
-                            patchVersion >= version.subVersionRange.start && patchVersion <= version.subVersionRange.end) {
-                        currentVersion = version;
-                        versionNumber = Integer.parseInt(currentVersion.name().split("_")[1]);
-                        releaseNumber = Integer.parseInt(currentVersion.name().split("R")[1]);
-                        break;
-                    }
-                }
-            }
+            int major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
+            int minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+            int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 
-            if (currentVersion == null) {
-                currentVersion = UNKNOWN;
-            }
-        } catch (Exception ignored) {
-            currentVersion = UNKNOWN;
+            return new MinecraftVersion(major, minor, patch);
+        } catch (Exception e) {
+            return new MinecraftVersion(0, 0, 0);
         }
     }
 
-    private final SubVersionRange subVersionRange;
-
-    MinecraftVersion(SubVersionRange subVersionRange) {
-        this.subVersionRange = subVersionRange;
-    }
-
     /**
-     * Returns the detected Minecraft server version.
+     * Compares this version to another version.
      *
-     * @return the current version or {@link #UNKNOWN}
+     * @param other the other version
+     * @return a negative value if lower, positive if higher, 0 if equal
      */
-    public static MinecraftVersion getCurrentVersion() {
-        return currentVersion;
-    }
-
-    /**
-     * Returns the numeric minor Minecraft version.
-     *
-     * @return the minor version number
-     */
-    public static int getVersionNumber() {
-        return versionNumber;
-    }
-
-    /**
-     * Returns the internal release number.
-     *
-     * @return the release number
-     */
-    public static int getReleaseNumber() {
-        return releaseNumber;
-    }
-
-    /**
-     * Returns the enum name of the current version.
-     *
-     * @return the version enum name
-     */
-    @Contract(pure = true)
-    public static @NotNull String getCurrentVersionName() {
-        return currentVersion.name();
-    }
-
-    /**
-     * Returns the enum name using lowercase 'v'.
-     *
-     * @return the version name with lowercase 'v'
-     */
-    @Contract(pure = true)
-    public static @NotNull String getCurrentVersionNameVtoLowerCase() {
-        return currentVersion.name().replace("V", "v");
-    }
-
-    /**
-     * Checks if this version is newer than or equal to another.
-     *
-     * @param minecraftVersion the version to compare against
-     * @return {@code true} if this version is newer or equal
-     */
-    public boolean isAboveOrEqual(@NotNull MinecraftVersion minecraftVersion) {
-        return this.ordinal() >= minecraftVersion.ordinal();
-    }
-
-    /**
-     * Checks if this version is newer than another.
-     *
-     * @param minecraftVersion the version to compare against
-     * @return {@code true} if this version is newer
-     */
-    public boolean isAbove(@NotNull MinecraftVersion minecraftVersion) {
-        return this.ordinal() > minecraftVersion.ordinal();
-    }
-
-    /**
-     * Checks if this version is older than or equal to another.
-     *
-     * @param minecraftVersion the version to compare against
-     * @return {@code true} if this version is older or equal
-     */
-    public boolean isBelowOrEqual(@NotNull MinecraftVersion minecraftVersion) {
-        return this.ordinal() <= minecraftVersion.ordinal();
-    }
-
-    /**
-     * Checks if this version is older than another.
-     *
-     * @param minecraftVersion the version to compare against
-     * @return {@code true} if this version is older
-     */
-    public boolean isBelow(@NotNull MinecraftVersion minecraftVersion) {
-        return this.ordinal() < minecraftVersion.ordinal();
-    }
-
-    /**
-     * Checks if this version is equal to another.
-     *
-     * @param minecraftVersion the version to compare against
-     * @return {@code true} if both versions are equal
-     */
-    public boolean isEqual(@NotNull MinecraftVersion minecraftVersion) {
-        return this.ordinal() == minecraftVersion.ordinal();
-    }
-
-    /**
-     * Returns the version range metadata.
-     *
-     * @return the sub version range
-     */
-    public SubVersionRange getSubVersionRange() {
-        return subVersionRange;
-    }
-
-    /**
-     * Holds patch range information for a Minecraft version.
-     */
-    public static class SubVersionRange {
-
-        /**
-         * Version string such as "1.20".
-         */
-        private final String version;
-
-        /**
-         * Lowest supported patch number.
-         */
-        private final int start;
-
-        /**
-         * Highest supported patch number.
-         */
-        private final int end;
-
-        /**
-         * Creates a fixed single-patch version range.
-         *
-         * @param version the major.minor version
-         * @param patch   the patch number
-         */
-        SubVersionRange(String version, int patch) {
-            this(version, patch, patch);
+    @Override
+    public int compareTo(MinecraftVersion other) {
+        if (this.major != other.major) {
+            return Integer.compare(this.major, other.major);
         }
-
-        /**
-         * Creates a ranged version definition.
-         *
-         * @param version the major.minor version
-         * @param start   the starting patch
-         * @param end     the ending patch
-         */
-        SubVersionRange(String version, int start, int end) {
-            this.version = version;
-            this.start = start;
-            this.end = end;
+        if (this.minor != other.minor) {
+            return Integer.compare(this.minor, other.minor);
         }
+        return Integer.compare(this.patch, other.patch);
+    }
 
-        /**
-         * Returns the version string.
-         *
-         * @return the major.minor version string
-         */
-        public String getVersion() {
-            return version;
-        }
+    /**
+     * Checks if this version is greater than or equal to the given version.
+     * Patch is ignored (assumes 0).
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return {@code true} if this version is >= given version
+     */
+    public boolean isAtLeast(int major, int minor) {
+        return compareTo(new MinecraftVersion(major, minor, 0)) >= 0;
+    }
 
-        /**
-         * Returns the lowest patch in range.
-         *
-         * @return the starting patch number
-         */
-        public int getStart() {
-            return start;
-        }
+    /**
+     * Checks if this version is greater than or equal to the given version.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @param patch the patch version
+     * @return {@code true} if this version is >= given version
+     */
+    public boolean isAtLeast(int major, int minor, int patch) {
+        return compareTo(new MinecraftVersion(major, minor, patch)) >= 0;
+    }
 
-        /**
-         * Returns the highest patch in range.
-         *
-         * @return the ending patch number
-         */
-        public int getEnd() {
-            return end;
-        }
+    /**
+     * Checks if this version is strictly greater than the given version.
+     * Patch is ignored (assumes 0).
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return {@code true} if this version is > given version
+     */
+    public boolean isAbove(int major, int minor) {
+        return isAbove(major, minor, 0);
+    }
+
+    /**
+     * Checks if this version is strictly greater than the given version.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @param patch the patch version
+     * @return {@code true} if this version is > given version
+     */
+    public boolean isAbove(int major, int minor, int patch) {
+        return compareTo(new MinecraftVersion(major, minor, patch)) > 0;
+    }
+
+    /**
+     * Checks if this version is exactly equal to the given version.
+     * Patch is ignored (assumes 0).
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return {@code true} if this version is exactly equal to the given version
+     */
+    public boolean isEqual(int major, int minor) {
+        return isEqual(major, minor, 0);
+    }
+
+    /**
+     * Checks if this version is exactly equal to the given version.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @param patch the patch version
+     * @return {@code true} if this version is exactly equal to the given version
+     */
+    public boolean isEqual(int major, int minor, int patch) {
+        return compareTo(new MinecraftVersion(major, minor, patch)) == 0;
+    }
+
+    /**
+     * Checks if this version is strictly lower than the given version.
+     * Patch is ignored (assumes 0).
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return {@code true} if this version is < given version
+     */
+    public boolean isBelow(int major, int minor) {
+        return isBelow(major, minor, 0);
+    }
+
+    /**
+     * Checks if this version is strictly lower than the given version.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @param patch the patch version
+     * @return {@code true} if this version is < given version
+     */
+    public boolean isBelow(int major, int minor, int patch) {
+        return compareTo(new MinecraftVersion(major, minor, patch)) < 0;
+    }
+
+    /**
+     * Checks if this version is within a range:
+     * {@code [min, max)} (inclusive lower bound, exclusive upper bound).
+     *
+     * @param minMajor minimum major version
+     * @param minMinor minimum minor version
+     * @param maxMajor maximum major version
+     * @param maxMinor maximum minor version
+     * @return {@code true} if within the specified range
+     */
+    public boolean isBetween(
+            int minMajor, int minMinor,
+            int maxMajor, int maxMinor
+    ) {
+        return isAtLeast(minMajor, minMinor)
+                && isBelow(maxMajor, maxMinor);
+    }
+
+    /**
+     * @return the major version
+     */
+    public int getMajor() {
+        return major;
+    }
+
+    /**
+     * @return the minor version
+     */
+    public int getMinor() {
+        return minor;
+    }
+
+    /**
+     * @return the patch version
+     */
+    public int getPatch() {
+        return patch;
+    }
+
+    /**
+     * Returns the version in {@code major.minor.patch} format.
+     *
+     * @return string representation of this version
+     */
+    @Override
+    public String toString() {
+        return major + "." + minor + "." + patch;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        MinecraftVersion that = (MinecraftVersion) obj;
+
+        return this.major == that.major
+                && this.minor == that.minor
+                && this.patch == that.patch;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(major, minor, patch);
     }
 }

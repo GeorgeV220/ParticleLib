@@ -139,7 +139,7 @@ public final class ParticlePacket {
         this.offsetZ = offsetZ;
         this.speed = speed;
         this.amount = amount;
-        if (ReflectionUtils.MINECRAFT_VERSION.isAboveOrEqual(MinecraftVersion.V1_18_R1)) {
+        if (ReflectionUtils.MINECRAFT_VERSION.isAtLeast(1, 18)) {
             if (particle == ParticleEffect.BARRIER) {
                 this.particle = ParticleEffect.BLOCK_MARKER;
                 this.particleData = new BlockTexture(Material.BARRIER);
@@ -261,12 +261,12 @@ public final class ParticlePacket {
                 Object nmsData = data.toNMSData();
                 if (nmsData == null)
                     return null;
-                if ((data instanceof DustData && version.isAboveOrEqual(MinecraftVersion.V1_13_R1))
-                        || (data instanceof VibrationData && version.isAboveOrEqual(MinecraftVersion.V1_17_R1))
-                        || (data instanceof ShriekData && version.isAboveOrEqual(MinecraftVersion.V1_19_R1))
-                        || (data instanceof SculkChargeData && version.isAboveOrEqual(MinecraftVersion.V1_19_R1))
-                        || (data instanceof TrailData && version.isAboveOrEqual(MinecraftVersion.V1_21_R2))
-                        || (data instanceof RegularColor && (version.isAboveOrEqual(MinecraftVersion.V1_17_R1) && effect.hasProperty(PropertyType.DUST))))
+                if ((data instanceof DustData && version.isAtLeast(1, 13))
+                        || (data instanceof VibrationData && version.isAtLeast(1, 17))
+                        || (data instanceof ShriekData && version.isAtLeast(1, 19))
+                        || (data instanceof SculkChargeData && version.isAtLeast(1, 19))
+                        || (data instanceof TrailData && version.isAtLeast(1, 21, 2))
+                        || (data instanceof RegularColor && (version.isAtLeast(1, 17) && effect.hasProperty(PropertyType.DUST))))
                     return createGenericParticlePacket(location, nmsData);
                 if ((data instanceof BlockTexture && effect.hasProperty(PropertyType.REQUIRES_BLOCK))
                         || (data instanceof ItemTexture && effect.hasProperty(PropertyType.REQUIRES_ITEM)))
@@ -316,10 +316,10 @@ public final class ParticlePacket {
      */
     private Object createTexturedParticlePacket(Location location, Object param) {
         MinecraftVersion version = ReflectionUtils.MINECRAFT_VERSION;
-        return createPacket(version.isBelow(MinecraftVersion.V1_13_R1) ? particle.getNMSObject() : param,
+        return createPacket(version.isBelow(1, 13) ? particle.getNMSObject() : param,
                 (float) location.getX(), (float) location.getY(), (float) location.getZ(),
                 offsetX, offsetY, offsetZ,
-                speed, amount, version.isBelow(MinecraftVersion.V1_13_R1) ? (int[]) param : new int[0]
+                speed, amount, version.isBelow(1, 13) ? (int[]) param : new int[0]
         );
     }
 
@@ -363,7 +363,7 @@ public final class ParticlePacket {
 
         // 1.20.5+: Use ColorParticleOption param for regular colored particles
         // Alpha/brightness is encoded in the ALPHA byte (0..255).
-        if (effect.hasProperty(PropertyType.REGULAR_COLOR) && ReflectionUtils.MINECRAFT_VERSION.isAboveOrEqual(MinecraftVersion.V1_20_R4)) {
+        if (effect.hasProperty(PropertyType.REGULAR_COLOR) && ReflectionUtils.MINECRAFT_VERSION.isAtLeast(1, 20, 5)) {
             // When using a ParticleParam, count/offset/speed are ignored client-side.
             return createPacket(
                     param,
@@ -375,7 +375,7 @@ public final class ParticlePacket {
         }
 
         // Other colored particles
-        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1) || effect != ParticleEffect.REDSTONE) {
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 13) || effect != ParticleEffect.REDSTONE) {
             return createPacket(
                     effect.getNMSObject(),
                     x, y, z,
@@ -419,11 +419,11 @@ public final class ParticlePacket {
     private Object createPacket(Object param, float locationX, float locationY, float locationZ, float offsetX, float offsetY, float offsetZ, float speed, int amount, int[] data) {
         Constructor packetConstructor = PACKET_PLAY_OUT_WORLD_PARTICLES_CONSTRUCTOR;
         try {
-            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1))
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 13))
                 return packetConstructor.newInstance(param, true, locationX, locationY, locationZ, offsetX, offsetY, offsetZ, speed, amount, data);
-            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_15_R1))
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 15))
                 return packetConstructor.newInstance(param, true, locationX, locationY, locationZ, offsetX, offsetY, offsetZ, speed, amount);
-            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_21_R3)) {
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 21, 4)) {
                 return packetConstructor.newInstance(param, true, (double) locationX, (double) locationY, (double) locationZ, offsetX, offsetY, offsetZ, speed, amount);
             }
             return packetConstructor.newInstance(param, true, true, (double) locationX, (double) locationY, (double) locationZ, offsetX, offsetY, offsetZ, speed, amount);

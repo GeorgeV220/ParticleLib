@@ -51,8 +51,8 @@ public class ParticleMappings {
      */
     private static void processMapping(@NotNull JsonObject object) {
         if (!isInRange(
-                object.get("min").getAsDouble(),
-                object.get("max").getAsDouble())) {
+                object.get("min").getAsString(),
+                object.get("max").getAsString())) {
             return;
         }
 
@@ -65,7 +65,7 @@ public class ParticleMappings {
         for (int i = 0; i < mappingsArray.size(); ++i) {
             JsonObject entry = mappingsArray.get(i).getAsJsonObject();
 
-            double from = entry.get("from").getAsDouble();
+            String from = entry.get("from").getAsString();
             int fromInt = toPackedVersion(from);
 
             if (getCurrentPackedVersion() >= fromInt && fromInt > lastFrom) {
@@ -82,40 +82,65 @@ public class ParticleMappings {
     /**
      * Check if version fits min/max range from json.
      */
-    private static boolean isInRange(double min, double max) {
+    private static boolean isInRange(String min, String max) {
         int current = getCurrentPackedVersion();
         int minInt = toPackedVersion(min);
         int maxInt = toPackedVersion(max);
+
         return current >= minInt && current <= maxInt;
     }
 
     /**
      * Packs the current version into a safe int.
-     * Example:
-     * 1.21.9  -> (21 << 8) | 9
+     * <p>
+     * Old format:
      * 1.21.10 -> (21 << 8) | 10
+     * <p>
+     * New format:
+     * 26.1.1 -> (26 << 8) | 1
      */
     private static int getCurrentPackedVersion() {
-        String base = MINECRAFT_VERSION.getSubVersionRange().getVersion();
-        String[] split = base.split("\\.");
+        int feature;
+        int patch;
 
-        int minor = Integer.parseInt(split[1]);
-        int patch = MINECRAFT_VERSION.getSubVersionRange().getEnd();
+        if (MINECRAFT_VERSION.getMajor() == 1) {
+            feature = MINECRAFT_VERSION.getMinor();
+            patch = MINECRAFT_VERSION.getPatch();
+        } else {
+            feature = MINECRAFT_VERSION.getMajor();
+            patch = MINECRAFT_VERSION.getMinor();
+        }
 
-        return (minor << 8) | patch;
+        return (feature << 8) | patch;
     }
 
     /**
-     * Converts JSON double version (21.9, 21.10, etc.) to packed int.
+     * Converts version string to packed int.
+     * <p>
+     * Supports:
+     * 1.21.10
+     * 21.3
+     * 26
+     * 26.1
+     * 26.1.1
      */
-    private static int toPackedVersion(double v) {
-        String s = String.valueOf(v);
-        String[] parts = s.split("\\.");
+    private static int toPackedVersion(@NotNull String version) {
+        String[] parts = version.split("\\.");
 
-        int minor = Integer.parseInt(parts[0]);
-        int patch = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+        int feature;
+        int patch;
 
-        return (minor << 8) | patch;
+        if (parts.length >= 3 && parts[0].equals("1")) {
+            feature = Integer.parseInt(parts[1]);
+            patch = Integer.parseInt(parts[2]);
+        } else {
+            feature = Integer.parseInt(parts[0]);
+            patch = parts.length > 1
+                    ? Integer.parseInt(parts[1])
+                    : 0;
+        }
+
+        return (feature << 8) | patch;
     }
 
     /**

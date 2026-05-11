@@ -24,6 +24,7 @@
 package com.georgev22.particle.utils;
 
 import com.georgev22.particle.ParticleConstants;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -94,17 +95,44 @@ public final class ReflectionUtils {
     private static Plugin plugin;
 
     static {
-        MINECRAFT_VERSION = MinecraftVersion.getCurrentVersion();
-        String version = MinecraftVersion.getCurrentVersionNameVtoLowerCase();
-        NET_MINECRAFT_SERVER_PACKAGE_PATH = "net.minecraft" + (MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1) ? ".server." + version : "");
+        MINECRAFT_VERSION = MinecraftVersion.getCurrent();
+
+        String packageName = Bukkit.getServer()
+                .getClass()
+                .getPackage()
+                .getName();
+
+        String version = packageName.equals("org.bukkit.craftbukkit")
+                ? ""
+                : packageName.substring("org.bukkit.craftbukkit.".length());
+
+        NET_MINECRAFT_SERVER_PACKAGE_PATH =
+                "net.minecraft" +
+                        (MINECRAFT_VERSION.isBelow(1, 17)
+                                ? ".server." + version
+                                : "");
+
         CRAFT_BUKKIT_PACKAGE_PATH =
-                MINECRAFT_VERSION.isAbove(MinecraftVersion.V1_20_R3) && isPaper()
+                MINECRAFT_VERSION.isAtLeast(1, 20, 3) && isPaper()
                         ? "org.bukkit.craftbukkit"
                         : "org.bukkit.craftbukkit." + version;
-        plugin = readDeclaredField(PLUGIN_CLASS_LOADER_PLUGIN_FIELD, ReflectionUtils.class.getClassLoader());
+
+        plugin = readDeclaredField(
+                PLUGIN_CLASS_LOADER_PLUGIN_FIELD,
+                ReflectionUtils.class.getClassLoader()
+        );
+
         PLAYER_CONNECTION_CACHE = new PlayerConnectionCache();
+
         try {
-            zipFile = new ZipFile(ReflectionUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            zipFile = new ZipFile(
+                    ReflectionUtils.class
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .toURI()
+                            .getPath()
+            );
         } catch (IOException | URISyntaxException ex) {
             throw new IllegalStateException("Error while finding zip file", ex);
         }
@@ -425,12 +453,12 @@ public final class ReflectionUtils {
             return null;
         try {
             // Minecraft removed the MinecraftKey constructor in 1.21 in favor of a static method.
-            if (MINECRAFT_VERSION.isAboveOrEqual(MinecraftVersion.V1_21_R1)) {
+            if (MINECRAFT_VERSION.isAtLeast(1, 21)) {
                 return ParticleConstants.MINECRAFT_KEY_METHOD.invoke(null, key);
             }
             return ParticleConstants.MINECRAFT_KEY_CONSTRUCTOR.newInstance(key);
         } catch (Exception ex) {
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 

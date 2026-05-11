@@ -27,7 +27,6 @@ package com.georgev22.particle.data.texture;
 import com.georgev22.particle.ParticleConstants;
 import com.georgev22.particle.PropertyType;
 import com.georgev22.particle.data.ParticleData;
-import com.georgev22.particle.utils.MinecraftVersion;
 import com.georgev22.particle.utils.ReflectionUtils;
 import org.bukkit.Material;
 
@@ -72,7 +71,7 @@ public final class BlockTexture extends ParticleTexture {
     public Object toNMSData() {
         if (getMaterial() == null || !getMaterial().isBlock() || getEffect() == null || !getEffect().hasProperty(PropertyType.REQUIRES_BLOCK))
             return null;
-        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_13_R1))
+        if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 13))
             return super.toNMSData();
         Object block = getBlockData(getMaterial());
         if (block == null)
@@ -93,7 +92,7 @@ public final class BlockTexture extends ParticleTexture {
     public Object getBlockData(Material material) {
         try {
             Object block;
-            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(MinecraftVersion.V1_17_R1)) {
+            if (ReflectionUtils.MINECRAFT_VERSION.isBelow(1, 17)) {
                 Field blockField = ReflectionUtils.getFieldOrNull(ParticleConstants.BLOCKS_CLASS, material.name(), false);
                 if (blockField == null)
                     return null;
