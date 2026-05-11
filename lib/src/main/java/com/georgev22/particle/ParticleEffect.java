@@ -1539,7 +1539,27 @@ public enum ParticleEffect {
      * <li>Speed value: Influences the velocity at which the particle flies off.</li>
      * </ul>
      */
-    WHITE_SMOKE(version -> version.isBelow(1, 20, 3) ? "NONE" : "white_smoke", DIRECTIONAL),;
+    WHITE_SMOKE(version -> version.isBelow(1, 20, 3) ? "NONE" : "white_smoke", DIRECTIONAL),
+    /**
+     * Shown when a golden dandelion is used on a mob to stop its growth.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Effect: Pauses the growth of a mob.</li>
+     * <li>Trigger: Using a golden dandelion on a mob.</li>
+     * </ul>
+     */
+    PAUSE_MOB_GROWTH(version -> version.isAtLeast(26, 1) ? "NONE" : "pause_mob_growth"),
+    /**
+     * Shown when a golden dandelion is used on a mob to resume its growth.
+     * <p>
+     * <b>Information</b>:
+     * <ul>
+     * <li>Effect: Resumes the growth of a previously paused mob.</li>
+     * <li>Trigger: Using a golden dandelion again on a mob.</li>
+     * </ul>
+     */
+    RESET_MOB_GROWTH(version -> version.isAtLeast(26, 1) ? "NONE" : "reset_mob_growth");
 
     /**
      * An array with all {@link ParticleEffect ParticleEffects}.
