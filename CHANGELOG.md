@@ -1,3 +1,11 @@
+## [1.7.1](https://github.com/GeorgeV220/ParticleLib/compare/v1.7.0...v1.7.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* improve Minecraft version parsing with regex pattern ([f974e66](https://github.com/GeorgeV220/ParticleLib/commit/f974e668565ee301f261935720d070d36cfaba36))
+* readd isEqual and isAbove methods to MinecraftVersion ([f242918](https://github.com/GeorgeV220/ParticleLib/commit/f242918d52efa7eba58827cf1cabcc718cbcbb58))
+
 # [1.7.0](https://github.com/GeorgeV220/ParticleLib/compare/v1.6.1...v1.7.0) (2026-05-11)
 
 
