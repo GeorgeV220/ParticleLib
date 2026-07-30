@@ -1,13 +1,19 @@
 package com.georgev22.particle.utils;
 
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Represents a Minecraft server version using a numeric format (major.minor.patch).
  */
 public final class MinecraftVersion implements Comparable<MinecraftVersion> {
+
+    private static final Pattern VERSION_PATTERN =
+            Pattern.compile("^(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?");
 
     private final int major;
     private final int minor;
@@ -56,19 +62,18 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
      * @param bukkitVersion the raw version string from Bukkit
      * @return a parsed {@link MinecraftVersion}, or {@code 0.0.0} if parsing fails
      */
-    public static MinecraftVersion parse(String bukkitVersion) {
-        try {
-            String versionPart = bukkitVersion.split("-")[0];
-            String[] parts = versionPart.split("\\.");
+    public static @NotNull MinecraftVersion parse(String bukkitVersion) {
+        Matcher matcher = VERSION_PATTERN.matcher(bukkitVersion);
 
-            int major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
-            int minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
-            int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
-
-            return new MinecraftVersion(major, minor, patch);
-        } catch (Exception e) {
+        if (!matcher.find()) {
             return new MinecraftVersion(0, 0, 0);
         }
+
+        int major = Integer.parseInt(matcher.group(1));
+        int minor = matcher.group(2) != null ? Integer.parseInt(matcher.group(2)) : 0;
+        int patch = matcher.group(3) != null ? Integer.parseInt(matcher.group(3)) : 0;
+
+        return new MinecraftVersion(major, minor, patch);
     }
 
     /**
@@ -113,54 +118,6 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
     }
 
     /**
-     * Checks if this version is strictly greater than the given version.
-     * Patch is ignored (assumes 0).
-     *
-     * @param major the major version
-     * @param minor the minor version
-     * @return {@code true} if this version is > given version
-     */
-    public boolean isAbove(int major, int minor) {
-        return isAbove(major, minor, 0);
-    }
-
-    /**
-     * Checks if this version is strictly greater than the given version.
-     *
-     * @param major the major version
-     * @param minor the minor version
-     * @param patch the patch version
-     * @return {@code true} if this version is > given version
-     */
-    public boolean isAbove(int major, int minor, int patch) {
-        return compareTo(new MinecraftVersion(major, minor, patch)) > 0;
-    }
-
-    /**
-     * Checks if this version is exactly equal to the given version.
-     * Patch is ignored (assumes 0).
-     *
-     * @param major the major version
-     * @param minor the minor version
-     * @return {@code true} if this version is exactly equal to the given version
-     */
-    public boolean isEqual(int major, int minor) {
-        return isEqual(major, minor, 0);
-    }
-
-    /**
-     * Checks if this version is exactly equal to the given version.
-     *
-     * @param major the major version
-     * @param minor the minor version
-     * @param patch the patch version
-     * @return {@code true} if this version is exactly equal to the given version
-     */
-    public boolean isEqual(int major, int minor, int patch) {
-        return compareTo(new MinecraftVersion(major, minor, patch)) == 0;
-    }
-
-    /**
      * Checks if this version is strictly lower than the given version.
      * Patch is ignored (assumes 0).
      *
@@ -172,14 +129,7 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
         return isBelow(major, minor, 0);
     }
 
-    /**
-     * Checks if this version is strictly lower than the given version.
-     *
-     * @param major the major version
-     * @param minor the minor version
-     * @param patch the patch version
-     * @return {@code true} if this version is < given version
-     */
+
     public boolean isBelow(int major, int minor, int patch) {
         return compareTo(new MinecraftVersion(major, minor, patch)) < 0;
     }
