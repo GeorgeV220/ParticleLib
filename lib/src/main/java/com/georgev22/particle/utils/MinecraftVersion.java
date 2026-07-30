@@ -130,6 +130,14 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
     }
 
 
+    /**
+     * Checks if this version is strictly lower than the given version.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @param patch the patch version
+     * @return {@code true} if this version is < given version
+     */
     public boolean isBelow(int major, int minor, int patch) {
         return compareTo(new MinecraftVersion(major, minor, patch)) < 0;
     }
@@ -150,6 +158,54 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
     ) {
         return isAtLeast(minMajor, minMinor)
                 && isBelow(maxMajor, maxMinor);
+    }
+
+    /**
+     * Checks if this version is equal to the given version.
+     * Patch is ignored (assumes 0).
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return {@code true} if this version is equal to given version
+     */
+    public boolean isEqual(int major, int minor) {
+        return isEqual(major, minor, 0);
+    }
+
+    /**
+     * Checks if this version is equal to the given version.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @param patch the patch version
+     * @return {@code true} if this version is equal to given version
+     */
+    public boolean isEqual(int major, int minor, int patch) {
+        return this.major == major && this.minor == minor && this.patch == patch;
+    }
+
+    /**
+     * Checks if this version is strictly greater than the given version.
+     * Patch is ignored (assumes 0).
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @return {@code true} if this version is > given version
+     */
+    public boolean isAbove(int major, int minor) {
+        return isAbove(major, minor, 0);
+    }
+
+    /**
+     * Checks if this version is strictly greater than the given version.
+     *
+     * @param major the major version
+     * @param minor the minor version
+     * @param patch the patch version
+     * @return {@code true} if this version is > given version
+     */
+    public boolean isAbove(int major, int minor, int patch) {
+        return compareTo(new MinecraftVersion(major, minor, patch)) > 0;
     }
 
     /**
@@ -183,6 +239,12 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
         return major + "." + minor + "." + patch;
     }
 
+    /**
+     * Checks if this version is equal to another object.
+     *
+     * @param obj the object to compare with
+     * @return {@code true} if the object is a MinecraftVersion with equal major, minor, and patch values
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -195,6 +257,11 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
                 && this.patch == that.patch;
     }
 
+    /**
+     * Returns a hash code for this version.
+     *
+     * @return hash code based on major, minor, and patch values
+     */
     @Override
     public int hashCode() {
         return Objects.hash(major, minor, patch);
